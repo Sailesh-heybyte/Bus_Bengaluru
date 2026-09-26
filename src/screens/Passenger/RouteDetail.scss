@@ -1,323 +1,49 @@
 @use '../../styles/variables' as *;
 
 .route-detail {
-  min-height: 100vh;
-  background-color: $kb-bg;
-  color: $kb-ink;
-  font-family: 'Noto Sans Kannada', 'Noto Sans', sans-serif;
-  box-sizing: border-box;
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  background-color: #f8f9fa;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans', sans-serif;
 
-  &__content {
-    padding: 72px 16px 84px; // 56px TopBar + 16px top, 60px BottomNav + 24px bottom
-    max-width: 600px;
-    margin: 0 auto;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-
-  &__skeletons {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  // Header Card
-  &__header-card {
-    background-color: $kb-surface;
-    border: 1px solid $kb-line;
-    border-radius: $kb-radius;
-    padding: 16px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    box-sizing: border-box;
-  }
-
-  &__path-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 16px;
-    font-weight: 700;
-    color: $kb-ink;
-    flex-wrap: wrap;
-  }
-
-  &__from,
-  &__to {
-    line-height: 1.3;
-  }
-
-  &__arrow {
-    color: $kb-muted;
-    font-weight: 400;
-  }
-
-  &__meta-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    border-top: 1px solid $kb-line;
-    padding-top: 12px;
-  }
-
-  &__meta-item {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-  }
-
-  &__meta-label {
-    font-size: 12px;
-    font-weight: 600;
-    color: $kb-muted;
-    text-transform: uppercase;
-    letter-spacing: 0.3px;
-  }
-
-  &__meta-value {
-    font-size: 15px;
-    font-weight: 700;
-    color: $kb-ink;
-  }
-
-  // 2-segment Tab Control
-  &__tabs {
-    display: flex;
-    border-bottom: 2px solid $kb-line;
-    background-color: transparent;
-  }
-
-  &__tab {
-    flex: 1;
-    background: none;
-    border: none;
-    border-bottom: 2px solid transparent;
-    margin-bottom: -2px;
-    padding: 10px 8px;
-    font-size: 15px;
-    font-weight: 500;
-    color: $kb-muted;
-    cursor: pointer;
-    text-align: center;
-    transition: color 0.15s ease-out, border-color 0.15s ease-out;
-
-    &:hover {
-      color: $kb-ink;
-    }
-
-    &--active {
-      color: $kb-ink;
-      font-weight: 700;
-      border-bottom: 2px solid $kb-primary;
-    }
-  }
-
-  // Stops Timeline
-  &__stops-section {
-    background-color: $kb-surface;
-    border: 1px solid $kb-line;
-    border-radius: $kb-radius;
-    padding: 16px 16px 16px 8px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
-    box-sizing: border-box;
-  }
-
-  &__timeline {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-  }
-
-  // Live Bus Marker on Timeline
-  &__live-bus {
+  &__offline-bar {
     position: absolute;
-    left: 14px;
-    transform: translateY(-50%);
-    margin-left: -8px; // Centers the 16px outer dot directly on the 14px vertical track line
-    z-index: 10;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+  }
+
+  &__loading-overlay {
+    position: absolute;
+    inset: 0;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 6px;
-    pointer-events: none;
-    transition: top 3s linear;
-  }
-
-  &__live-bus-dot {
-    position: relative;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background-color: $kb-accent;
-    border: 2px solid $kb-surface;
-    box-shadow: 0 1px 4px rgba(217, 119, 6, 0.5);
-    box-sizing: content-box;
-    flex-shrink: 0;
-
-    &::before {
-      content: '';
-      position: absolute;
-      top: -4px;
-      left: -4px;
-      right: -4px;
-      bottom: -4px;
-      border-radius: 50%;
-      border: 2px solid $kb-accent;
-      animation: live-bus-pulse 1.8s ease-out infinite;
-    }
-  }
-
-  &__live-bus-badge {
-    background-color: $kb-badge-bg;
-    color: #ffffff;
-    font-size: 10px;
-    font-weight: 700;
-    padding: 2px 6px;
-    border-radius: 4px;
-    white-space: nowrap;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-    letter-spacing: 0.2px;
-  }
-
-  &__timeline-item {
-    display: flex;
-    align-items: stretch;
-    min-height: 52px;
-    cursor: pointer;
-    border-radius: 6px;
-    transition: background-color 0.15s ease-out;
-
-    &:hover,
-    &:focus-visible {
-      background-color: #fafbfc;
-      outline: none;
-    }
-  }
-
-  &__timeline-track {
-    position: relative;
-    width: 28px;
-    flex-shrink: 0;
-    display: flex;
     justify-content: center;
-
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 2px;
-      background-color: $kb-line;
-    }
-  }
-
-  &__timeline-item--first &__timeline-track::before {
-    top: 15px;
-  }
-
-  &__timeline-item--last &__timeline-track::before {
-    bottom: calc(100% - 15px);
-  }
-
-  &__timeline-dot {
-    position: relative;
-    z-index: 2;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background-color: $kb-primary;
-    border: 2px solid $kb-surface;
-    margin-top: 12px;
-    box-shadow: 0 0 0 1px $kb-line;
-    box-sizing: content-box;
-    flex-shrink: 0;
-  }
-
-  &__timeline-content {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 8px 8px 8px 10px;
-    min-width: 0;
-  }
-
-  &__stop-name {
-    font-size: 15px;
-    font-weight: 600;
-    color: $kb-ink;
-    line-height: 1.3;
-  }
-
-  &__stop-meta {
-    font-size: 13px;
-    color: $kb-muted;
+    gap: 16px;
+    background-color: #ffffff;
+    z-index: 200;
+    color: #4b5563;
+    font-size: 14px;
     font-weight: 500;
-    margin-top: 2px;
   }
 
-  // Timetable Grid
-  &__timetable-section {
-    background-color: $kb-surface;
-    border: 1px solid $kb-line;
-    border-radius: $kb-radius;
-    padding: 16px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
-    box-sizing: border-box;
-  }
-
-  &__timetable-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
-    gap: 10px;
-  }
-
-  &__timetable-pill {
-    background-color: $kb-surface;
-    border: 1px solid $kb-line;
-    border-radius: 20px;
-    padding: 8px 12px;
-    text-align: center;
-    box-sizing: border-box;
-    transition: border-color 0.15s ease-out, background-color 0.15s ease-out;
-
-    &:hover {
-      border-color: $kb-primary;
-      background-color: $kb-primary-light;
-    }
-  }
-
-  &__timetable-time {
-    font-size: 13px;
-    font-weight: 600;
-    color: $kb-ink;
-    white-space: nowrap;
-  }
-
-  // Map Section
-  &__map-section {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    width: 100%;
-    box-sizing: border-box;
+  &__spinner {
+    width: 36px;
+    height: 36px;
+    border: 3px solid #e5e7eb;
+    border-top-color: #1976d2;
+    border-radius: 50%;
+    animation: routeDetailSpin 0.8s linear infinite;
   }
 }
 
-@keyframes live-bus-pulse {
-  0% {
-    transform: scale(0.7);
-    opacity: 0.9;
-  }
-  100% {
-    transform: scale(2.2);
-    opacity: 0;
+@keyframes routeDetailSpin {
+  to {
+    transform: rotate(360deg);
   }
 }

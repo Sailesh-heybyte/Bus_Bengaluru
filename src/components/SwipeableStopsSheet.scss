@@ -1,0 +1,283 @@
+.swipeable-stops-sheet {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: #ffffff;
+  border-radius: 20px 20px 0 0;
+  box-shadow: 0 -4px 28px rgba(0, 0, 0, 0.14);
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  transition: height 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+  user-select: none;
+
+  &--dragging {
+    transition: none; // Instant response while dragging
+  }
+
+  // Drag handle bar
+  &__handle-wrapper {
+    width: 100%;
+    padding: 10px 0 4px;
+    display: flex;
+    justify-content: center;
+    cursor: grab;
+
+    &:active {
+      cursor: grabbing;
+    }
+  }
+
+  &__handle-pill {
+    width: 38px;
+    height: 4.5px;
+    background-color: #d1d5db;
+    border-radius: 4px;
+  }
+
+  // Header Section
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 20px 12px;
+    position: relative;
+  }
+
+  &__back-arrow {
+    background: none;
+    border: none;
+    padding: 0;
+    margin-right: 14px;
+    font-size: 22px;
+    color: #111827;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__title-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  &__route-num {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 700;
+    color: #111827;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+
+  &__destination {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 400;
+    color: #4b5563;
+  }
+
+  &__actions {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  &__kebab-btn {
+    background: none;
+    border: none;
+    padding: 6px;
+    font-size: 20px;
+    color: #374151;
+    cursor: pointer;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:active {
+      background-color: #f3f4f6;
+    }
+  }
+
+  &__menu-dropdown {
+    position: absolute;
+    top: 36px;
+    right: 0;
+    background: #ffffff;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
+    border-radius: 12px;
+    padding: 6px;
+    min-width: 170px;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #f1f3f5;
+  }
+
+  &__menu-item {
+    background: none;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #1f2937;
+    cursor: pointer;
+    border-radius: 8px;
+    text-align: left;
+
+    i {
+      font-size: 15px;
+      color: #dc2626;
+    }
+
+    &:hover,
+    &:active {
+      background-color: #f9fafb;
+    }
+  }
+
+  &__divider {
+    height: 1px;
+    background-color: #e5e7eb;
+    margin: 0 16px;
+  }
+
+  // Scrollable Content
+  &__content {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 8px 20px 32px;
+  }
+
+  // Stops Timeline
+  &__timeline {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__stop-item {
+    display: flex;
+    align-items: flex-start;
+    min-height: 54px;
+    position: relative;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+    border-radius: 8px;
+
+    &:hover {
+      background-color: #fafbfc;
+    }
+  }
+
+  // Left Column containing the continuous vertical line and the stop node / bus icon
+  &__track-col {
+    position: relative;
+    width: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-shrink: 0;
+    align-self: stretch;
+  }
+
+  &__track-line {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2.5px;
+    background-color: #1a1d20;
+    z-index: 1;
+
+    .swipeable-stops-sheet__stop-item--first & {
+      top: 14px;
+    }
+
+    .swipeable-stops-sheet__stop-item--last & {
+      bottom: calc(100% - 14px);
+    }
+  }
+
+  // Hollow Circle Node on the track
+  &__stop-circle {
+    position: relative;
+    z-index: 2;
+    margin-top: 8px;
+    width: 13px;
+    height: 13px;
+    background-color: #ffffff;
+    border: 2.5px solid #1a1d20;
+    border-radius: 50%;
+  }
+
+  // Blue Bus Notation Marker (positioned directly over the track line)
+  &__bus-badge-marker {
+    position: relative;
+    z-index: 3;
+    margin-top: 2px;
+    width: 26px;
+    height: 26px;
+    background-color: #1976d2;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-size: 14px;
+    box-shadow: 0 2px 8px rgba(25, 118, 210, 0.4);
+
+    // Downward arrow pointer below the circle
+    .swipeable-stops-sheet__bus-pointer {
+      position: absolute;
+      bottom: -5px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 6px solid #1976d2;
+    }
+  }
+
+  // Right column: Stop Name and Metadata
+  &__stop-info {
+    flex: 1;
+    padding: 6px 0 16px 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
+  &__stop-name {
+    font-size: 15px;
+    font-weight: 500;
+    color: #1f2937;
+    line-height: 1.35;
+  }
+
+  &__live-tag {
+    font-size: 11px;
+    font-weight: 600;
+    color: #1976d2;
+    margin-top: 2px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+}
