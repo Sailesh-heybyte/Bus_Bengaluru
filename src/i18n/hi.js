@@ -62,5 +62,8 @@ export default {
   schemes_sub: "शक्ति योजना और छात्र पास",
   tickets_sub: "पास, टिकट और एनसीएमसी कार्ड",
   alerts_sub: "लाइव देरी और सेवा अपडेट",
-  complaints_sub: "शिकायत निवारण और सहायता"
+  complaints_sub: "शिकायत निवारण और सहायता",
+  search_buses: "बस खोजें",
+  available_buses: "उपलब्ध बस रूट",
+  no_buses_found: "इस रूट के लिए कोई बस नहीं मिली"
 };

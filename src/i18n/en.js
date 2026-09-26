@@ -269,5 +269,8 @@ export default {
   to_station: "Enter destination",
   from_label: "From",
   to_label: "To",
-  clear_history: "Clear"
+  clear_history: "Clear",
+  search_buses: "Search Buses",
+  available_buses: "Available Bus Routes",
+  no_buses_found: "No buses found for this route"
 };

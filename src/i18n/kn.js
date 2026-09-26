@@ -269,5 +269,8 @@ export default {
   to_station: "ಗಮ್ಯಸ್ಥಾನ ನಮೂದಿಸಿ",
   from_label: "ಇಂದ",
   to_label: "ವರೆಗೆ",
-  clear_history: "ತೆರವು"
+  clear_history: "ತೆರವು",
+  search_buses: "ಬಸ್ ಹುಡುಕಿ",
+  available_buses: "ಲಭ್ಯವಿರುವ ಬಸ್ ಮಾರ್ಗಗಳು",
+  no_buses_found: "ಈ ಮಾರ್ಗದಲ್ಲಿ ಯಾವುದೇ ಬಸ್ ಕಂಡುಬಂದಿಲ್ಲ"
 };
