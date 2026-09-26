@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, useMemo, useCallback } from 'react';
 import { loadGoogleMaps } from '../utils/googleMapsLoader';
-import { ROUTE_500D_ROAD_WAYPOINTS, generateDenseRoadPath } from '../data/route500dRoadPath';
+import { getRouteRoadPath } from '../data/routeRoadShapes';
 import './GoogleRouteMap.scss';
 
 // Calculate bearing in degrees between two coordinates (0° = North, 90° = East)
@@ -64,6 +64,7 @@ function createBusSvg(heading = 0, isSelected = false) {
 }
 
 export function GoogleRouteMap({
+  routeId,
   stops = [],
   liveBuses = [],
   onBack,
@@ -78,8 +79,13 @@ export function GoogleRouteMap({
 
   const [mapLoaded, setMapLoaded] = useState(false);
   const [roadPathData, setRoadPathData] = useState(() =>
-    generateDenseRoadPath(ROUTE_500D_ROAD_WAYPOINTS, 8)
+    getRouteRoadPath(routeId, stops, 8)
   );
+
+  // Keep roadPathData in sync when routeId or stops change
+  useEffect(() => {
+    setRoadPathData(getRouteRoadPath(routeId, stops, 8));
+  }, [routeId, stops]);
 
   // Valid stops with latitude & longitude
   const validStops = useMemo(() => {

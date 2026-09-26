@@ -74,6 +74,7 @@ export function RouteDetail() {
           <>
             {/* Full Screen Google Maps Layer */}
             <GoogleRouteMap
+              routeId={id}
               stops={routeDetail.stops}
               liveBuses={trackedBuses}
               onBack={() => navigate(-1)}
