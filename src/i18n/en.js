@@ -271,5 +271,7 @@ export default {
   to_station: "Enter destination",
   from_label: "From",
   to_label: "To",
-  clear_history: "Clear"
+  clear_history: "Clear",
+  Metro: "Metro",
+  metro: "Metro"
 };

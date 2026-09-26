@@ -155,27 +155,10 @@ export function Search() {
             <i className="bi bi-chevron-left" />
           </button>
 
-          {/* Mode Switcher pill matching reference styling */}
-          <div className="search-page__mode-toggle">
-            <button
-              type="button"
-              className={`search-page__mode-btn ${
-                transportMode === 'mrt' ? 'search-page__mode-btn--active' : ''
-              }`}
-              onClick={() => handleModeChange('mrt')}
-            >
-              MRT
-            </button>
-            <button
-              type="button"
-              className={`search-page__mode-btn ${
-                transportMode === 'bus' ? 'search-page__mode-btn--active' : ''
-              }`}
-              onClick={() => handleModeChange('bus')}
-            >
-              {t('bus')}
-            </button>
-          </div>
+          {/* Clean Centered Title matching reference design */}
+          <h1 className="search-page__title">
+            {transportMode === 'bus' ? t('bus') : 'MRT'}
+          </h1>
 
           <div className="search-page__nav-spacer" />
         </div>

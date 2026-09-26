@@ -261,7 +261,7 @@ export function Home() {
             >
               <div className="home-transport-card__info">
                 <h3 className="home-transport-card__name home-transport-card__name--mrt">
-                  {t('mrt')}
+                  {t('Metro')}
                 </h3>
               </div>
 

@@ -271,5 +271,7 @@ export default {
   to_station: "ಗಮ್ಯಸ್ಥಾನ ನಮೂದಿಸಿ",
   from_label: "ಇಂದ",
   to_label: "ವರೆಗೆ",
-  clear_history: "ತೆರವು"
+  clear_history: "ತೆರವು",
+  Metro: "ಮೆಟ್ರೋ",
+  metro: "ಮೆಟ್ರೋ"
 };
