@@ -1,0 +1,57 @@
+@use '../styles/variables' as *;
+
+.offline-strip {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  box-sizing: border-box;
+
+  &__warning {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    background-color: #fffbeb;
+    border: 1px solid #fef3c7;
+    border-left: 4px solid $kb-accent;
+    border-radius: $kb-radius;
+    color: #92400e;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  }
+
+  &__warning-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    color: $kb-accent;
+  }
+
+  &__warning-text {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  &__diagram-card {
+    background-color: $kb-surface;
+    border: 1px solid $kb-line;
+    border-radius: $kb-radius;
+    padding: 16px 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+    display: flex;
+    justify-content: center;
+    overflow-x: hidden;
+  }
+
+  &__svg {
+    width: 100%;
+    max-width: 340px;
+    height: auto;
+    display: block;
+  }
+
+  &__node {
+    transition: opacity 0.2s ease;
+  }
+}

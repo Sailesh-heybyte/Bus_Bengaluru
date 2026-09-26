@@ -1,0 +1,73 @@
+@use './variables' as *;
+
+/* Global Typography & Smoothing */
+html,
+body {
+  font-family: 'Inter', 'Noto Sans Kannada', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4, h5, h6,
+.font-heading {
+  font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, sans-serif;
+}
+
+/* Modern Heading Utility Classes with Tight Tracking */
+.display-title,
+.font-display {
+  font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+}
+
+.heading-1 {
+  font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+
+.subtitle-muted {
+  font-weight: 500;
+  color: $kb-muted;
+  line-height: 1.4;
+}
+
+/* Global tap transitions for buttons and interactive elements (180ms to 220ms ease-out) */
+button,
+[role="button"],
+a,
+input,
+select,
+textarea {
+  transition: 
+    background-color 200ms ease-out,
+    border-color 200ms ease-out,
+    color 200ms ease-out,
+    box-shadow 200ms ease-out,
+    opacity 200ms ease-out,
+    transform 100ms ease-out;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Instant tactile press feedback within 100ms */
+button:active:not(:disabled),
+[role="button"]:active:not(:disabled),
+.clickable-item:active {
+  transform: scale(0.97);
+}
+
+/* Accessibility: Respect user preference for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -1,0 +1,420 @@
+@use '../../styles/variables' as *;
+
+.trip-planner {
+  min-height: 100vh;
+  background-color: $kb-bg;
+  color: $kb-text;
+  font-family: 'Noto Sans Kannada', 'Noto Sans', sans-serif;
+  box-sizing: border-box;
+
+  &__content {
+    padding: 72px 16px 84px; // 56px TopBar + 16px top, 60px BottomNav + 24px bottom
+    max-width: 600px;
+    margin: 0 auto;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  // Search Card
+  &__search-card {
+    background-color: $kb-surface;
+    border: 1px solid $kb-line;
+    border-radius: $kb-radius;
+    padding: 16px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+    box-sizing: border-box;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  &__input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  &__label {
+    font-size: 12px;
+    font-weight: 600;
+    color: $kb-text-muted;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+
+  &__input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: #f8fafc;
+    border: 1px solid $kb-line;
+    border-radius: 6px;
+    padding: 8px 12px;
+    transition: border-color 0.15s ease-out, background-color 0.15s ease-out;
+
+    &:focus-within {
+      border-color: $kb-primary;
+      background-color: $kb-surface;
+      box-shadow: 0 0 0 2px rgba(133, 19, 19, 0.1);
+    }
+  }
+
+  &__input-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+
+    &--start {
+      background-color: $kb-primary;
+    }
+
+    &--end {
+      background-color: $kb-accent;
+    }
+  }
+
+  &__input {
+    border: none;
+    background: transparent;
+    font-size: 15px;
+    font-weight: 600;
+    color: $kb-text;
+    width: 100%;
+    outline: none;
+    font-family: inherit;
+
+    &::placeholder {
+      color: $kb-text-muted;
+      font-weight: 400;
+    }
+  }
+
+  &__swap-row {
+    display: flex;
+    align-items: center;
+    position: relative;
+    height: 16px;
+  }
+
+  &__input-divider {
+    flex: 1;
+    height: 1px;
+    background-color: $kb-line;
+  }
+
+  &__swap-btn {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background-color: $kb-surface;
+    border: 1px solid $kb-line;
+    color: $kb-text-muted;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    transition: color 0.15s, border-color 0.15s, transform 0.15s;
+
+    &:hover {
+      color: $kb-primary;
+      border-color: $kb-primary;
+      transform: translateY(-50%) rotate(180deg);
+    }
+  }
+
+  &__submit-btn {
+    margin-top: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background-color: $kb-primary;
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    padding: 12px 16px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(133, 19, 19, 0.2);
+    transition: background-color 0.15s ease-out, transform 0.15s ease-out;
+
+    &:hover {
+      background-color: $kb-primary-dark;
+      transform: translateY(-1px);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+
+  // Skeletons
+  &__skeletons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  // Result Card
+  &__result-card {
+    background-color: $kb-surface;
+    border: 1px solid $kb-line;
+    border-radius: $kb-radius;
+    padding: 16px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  &__summary-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    background-color: #f8fafc;
+    border: 1px solid $kb-line;
+    border-radius: 6px;
+    padding: 12px 16px;
+  }
+
+  &__summary-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+  }
+
+  &__summary-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: $kb-text-muted;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+
+  &__summary-val {
+    font-size: 17px;
+    font-weight: 800;
+    color: $kb-primary;
+  }
+
+  &__summary-divider {
+    width: 1px;
+    height: 32px;
+    background-color: $kb-line;
+  }
+
+  // Vertical Multi-leg Timeline
+  &__timeline {
+    display: flex;
+    flex-direction: column;
+    padding-left: 4px;
+  }
+
+  &__leg {
+    display: flex;
+    align-items: stretch;
+    min-height: 80px;
+
+    &--interchange {
+      min-height: 72px;
+    }
+  }
+
+  &__leg-track {
+    position: relative;
+    width: 28px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    // 2px $kb-line vertical border/track
+    &::before {
+      content: '';
+      position: absolute;
+      top: 6px;
+      bottom: -6px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 2px;
+      background-color: $kb-line;
+      z-index: 1;
+    }
+  }
+
+  // Last leg shouldn't extend line past the final node
+  &__leg:last-child &__leg-track::before {
+    bottom: 24px;
+  }
+
+  &__leg--interchange &__leg-track::before {
+    border-left: 2px dashed $kb-line;
+    background: none;
+    width: 0;
+  }
+
+  // Timeline Nodes
+  &__node {
+    position: relative;
+    z-index: 2;
+    margin-top: 4px;
+    box-sizing: content-box;
+
+    // Solid $kb-primary dot for ride points
+    &--ride {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: $kb-primary;
+      border: 2px solid $kb-surface;
+      box-shadow: 0 0 0 1px $kb-line;
+    }
+
+    &--ride-end {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: $kb-primary;
+      border: 2px solid $kb-surface;
+      box-shadow: 0 0 0 1px $kb-line;
+    }
+
+    // Hollow $kb-accent circle for interchange
+    &--interchange {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background-color: $kb-surface;
+      border: 3px solid $kb-accent;
+      box-shadow: 0 1px 3px rgba(217, 119, 6, 0.3);
+    }
+  }
+
+  &__leg-content {
+    flex: 1;
+    padding: 0 8px 16px 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  &__stop-point {
+    display: flex;
+    align-items: center;
+
+    &--end {
+      margin-top: 14px;
+    }
+  }
+
+  &__stop-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: $kb-text;
+    line-height: 1.3;
+  }
+
+  // Ride details info box
+  &__ride-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: #f8fafc;
+    border: 1px solid $kb-line;
+    border-radius: 6px;
+    padding: 8px 12px;
+    width: fit-content;
+    box-sizing: border-box;
+  }
+
+  &__route-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background-color: $kb-badge-bg;
+    color: #ffffff;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+  }
+
+  &__route-tag {
+    opacity: 0.8;
+    font-size: 10px;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  &__route-number {
+    font-weight: 800;
+  }
+
+  &__ride-duration {
+    font-size: 13px;
+    font-weight: 600;
+    color: $kb-text-muted;
+  }
+
+  // Interchange info box
+  &__interchange-box {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    background-color: #fffbeb;
+    border: 1px solid #fef3c7;
+    border-left: 3px solid $kb-accent;
+    border-radius: 6px;
+    padding: 8px 12px;
+    box-sizing: border-box;
+  }
+
+  &__interchange-text {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  &__change-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #92400e;
+    text-transform: uppercase;
+    letter-spacing: 0.2px;
+  }
+
+  &__change-location {
+    font-size: 14px;
+    font-weight: 700;
+    color: #78350f;
+  }
+
+  &__wait-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #92400e;
+  }
+}

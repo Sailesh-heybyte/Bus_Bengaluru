@@ -1,0 +1,122 @@
+@use '../styles/variables' as *;
+
+.sheet-root {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+
+  &__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(15, 23, 42, 0.55);
+    backdrop-filter: blur(2px);
+    animation: sheet-overlay-fade 200ms ease-out forwards;
+  }
+
+  &__container {
+    position: relative;
+    width: 100%;
+    max-width: 600px;
+    background-color: $kb-surface;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
+    padding: 12px 20px 32px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-height: 85vh;
+    overflow-y: auto;
+    animation: sheet-slide-up 220ms ease-out forwards;
+    z-index: 1;
+  }
+
+  &__handle {
+    width: 36px;
+    height: 4px;
+    border-radius: 2px;
+    background-color: $kb-line;
+    margin: 0 auto;
+    flex-shrink: 0;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 8px;
+    border-bottom: 1px solid $kb-line;
+  }
+
+  &__title {
+    font-size: 17px;
+    font-weight: 700;
+    color: $kb-text;
+    margin: 0;
+  }
+
+  &__close-btn {
+    background: none;
+    border: none;
+    padding: 6px;
+    color: $kb-text-muted;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.15s ease-out, color 0.15s ease-out;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+      color: $kb-text;
+    }
+  }
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+}
+
+@keyframes sheet-overlay-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes sheet-slide-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sheet-root__overlay {
+    animation: none;
+    opacity: 1;
+  }
+
+  .sheet-root__container {
+    animation: none;
+    transform: translateY(0);
+  }
+}

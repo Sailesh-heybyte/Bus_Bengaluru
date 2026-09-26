@@ -1,0 +1,42 @@
+@use '../styles/variables' as *;
+
+.loading-row {
+  height: 60px;
+  border-radius: $kb-radius;
+  background: linear-gradient(
+    90deg,
+    $kb-line 0%,
+    $kb-surface 50%,
+    $kb-line 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.5s infinite ease-in-out;
+  margin-bottom: 12px;
+  width: 100%;
+  box-sizing: border-box;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+    background: $kb-line;
+    opacity: 0.6;
+  }
+}
+
+.loading-rows-group {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}

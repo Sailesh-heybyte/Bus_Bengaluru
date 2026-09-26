@@ -1,0 +1,130 @@
+@use '../styles/variables' as *;
+
+.top-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 56px;
+  background-color: $kb-surface;
+  border-bottom: 1px solid $kb-line;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  z-index: 1000;
+  box-sizing: border-box;
+
+  &__left {
+    display: flex;
+    align-items: center;
+    width: 60px;
+    flex-shrink: 0;
+  }
+
+  &__back-btn {
+    background: none;
+    border: none;
+    padding: 8px;
+    margin-left: -8px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: $kb-text;
+    border-radius: 50%;
+    transition: background-color 0.15s ease-out;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.06);
+    }
+  }
+
+  &__back-icon {
+    display: block;
+  }
+
+  &__title {
+    font-size: 17px;
+    font-weight: 700;
+    color: $kb-text;
+    margin: 0;
+    text-align: center;
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding: 0 4px;
+  }
+
+  &__right {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 6px;
+    min-width: 60px;
+    flex-shrink: 0;
+  }
+
+  &__heart-btn {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    min-height: 36px;
+    border-radius: 50%;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.15s ease-out, transform 0.15s ease-out, color 0.15s ease-out;
+    padding: 0;
+    box-sizing: border-box;
+
+    &--saved {
+      background-color: $kb-primary;
+      color: $kb-surface;
+
+      i {
+        color: $kb-surface !important;
+      }
+
+      &:hover {
+        background-color: $kb-primary-dark;
+      }
+    }
+
+    &--unsaved {
+      background-color: transparent;
+      color: $kb-muted;
+      border: 1px solid $kb-line;
+
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.04);
+        color: $kb-primary;
+      }
+    }
+
+    &:active {
+      transform: scale(0.92);
+    }
+  }
+
+  &__lang-btn {
+    background-color: $kb-primary-light;
+    border: 1px solid rgba(133, 19, 19, 0.2);
+    color: $kb-primary;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.15s ease-out;
+
+    &:hover {
+      background-color: $kb-primary;
+      color: #ffffff;
+    }
+  }
+}

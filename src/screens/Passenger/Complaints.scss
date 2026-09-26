@@ -1,0 +1,373 @@
+@use '../../styles/variables' as *;
+
+.complaints-screen {
+  min-height: 100vh;
+  background-color: $kb-bg;
+  color: $kb-text;
+  font-family: 'Noto Sans Kannada', 'Noto Sans', sans-serif;
+  box-sizing: border-box;
+
+  &__content {
+    padding: 72px 16px 84px; // 56px TopBar + 16px, 60px BottomNav + 24px
+    max-width: 600px;
+    margin: 0 auto;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  /* Segment Switcher */
+  &__tabs {
+    display: flex;
+    background-color: #e2e8f0;
+    border-radius: 10px;
+    padding: 4px;
+    gap: 4px;
+  }
+
+  &__tab-btn {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    color: $kb-text-muted;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+
+    &--active {
+      background-color: $kb-surface;
+      color: $kb-primary;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  &__skeletons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  &__tab-pane {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  /* Prominent Raise Button */
+  &__raise-btn {
+    width: 100%;
+    min-height: 48px;
+    background-color: $kb-primary;
+    color: #ffffff;
+    border: none;
+    border-radius: 10px;
+    padding: 12px 18px;
+    font-size: 15px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(133, 19, 19, 0.2);
+    transition: transform 0.15s ease, background-color 0.15s ease;
+
+    &:hover {
+      background-color: $kb-primary-dark;
+      transform: translateY(-1px);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+
+    i {
+      font-size: 18px;
+    }
+  }
+
+  &__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+}
+
+/* Complaint Card */
+.complaint-card {
+  background-color: $kb-surface;
+  border: 1px solid $kb-line;
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__number {
+    font-size: 13px;
+    font-weight: 700;
+    font-family: monospace;
+    color: $kb-text;
+    letter-spacing: 0.3px;
+  }
+
+  /* Status Badges: $kb-surface background with 1px border */
+  &__status {
+    background-color: $kb-surface;
+    border-radius: 6px;
+    padding: 3px 8px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+
+    &--submitted {
+      border: 1px solid $kb-line;
+      color: $kb-muted; // $kb-muted for submitted per design notes
+    }
+
+    &--in_review {
+      border: 1px solid rgba(217, 119, 6, 0.3);
+      color: $kb-accent; // $kb-accent for in_review per design notes
+    }
+
+    &--resolved,
+    &--closed {
+      border: 1px solid rgba(21, 128, 61, 0.3);
+      color: $kb-ontime; // $kb-ontime for resolved/closed per design notes
+    }
+  }
+
+  &__meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 12px;
+    color: $kb-text-muted;
+  }
+
+  &__category {
+    font-weight: 600;
+    color: $kb-primary;
+    background-color: #fee2e2;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+  }
+
+  &__date {
+    font-size: 12px;
+    color: $kb-muted;
+  }
+
+  &__desc {
+    font-size: 14px;
+    line-height: 1.45;
+    color: $kb-text;
+    margin: 0;
+  }
+
+  &__resolution {
+    background-color: #f0fdf4;
+    border-left: 3px solid $kb-ontime;
+    border-radius: 4px;
+    padding: 8px 10px;
+    display: flex;
+    gap: 6px;
+    font-size: 12px;
+  }
+
+  &__resolution-label {
+    font-weight: 700;
+    color: $kb-ontime;
+  }
+
+  &__resolution-text {
+    color: #166534;
+  }
+}
+
+/* Lost & Found Card */
+.lostfound-card {
+  background-color: $kb-surface;
+  border: 1px solid $kb-line;
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__item-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 15px;
+    font-weight: 700;
+    color: $kb-text;
+
+    i {
+      font-size: 18px;
+      color: $kb-primary;
+    }
+  }
+
+  &__status {
+    background-color: $kb-surface;
+    border-radius: 6px;
+    padding: 3px 8px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+
+    &--found {
+      border: 1px solid rgba(21, 128, 61, 0.3);
+      color: $kb-ontime;
+    }
+
+    &--reported {
+      border: 1px solid $kb-line;
+      color: $kb-muted;
+    }
+  }
+
+  &__details {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    background-color: #f8fafc;
+    border-radius: 8px;
+    padding: 8px 12px;
+  }
+
+  &__detail-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+  }
+
+  &__label {
+    color: $kb-text-muted;
+    font-weight: 500;
+  }
+
+  &__val {
+    font-weight: 600;
+    color: $kb-text;
+  }
+
+  &__contact-btn {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #ecfdf5;
+    border: 1px solid #a7f3d0;
+    color: $kb-ontime;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 8px 16px;
+    border-radius: 8px;
+    transition: background-color 0.15s ease;
+
+    &:hover {
+      background-color: #d1fae5;
+    }
+  }
+}
+
+/* Form in Sheet */
+.complaint-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  &__group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  &__label {
+    font-size: 13px;
+    font-weight: 700;
+    color: $kb-text;
+  }
+
+  /* Form Inputs: $kb-surface backgrounds, $kb-line borders, and 16px padding */
+  &__select {
+    background-color: $kb-surface;
+    border: 1px solid $kb-line;
+    border-radius: 10px;
+    padding: 16px;
+    font-size: 15px;
+    color: $kb-text;
+    outline: none;
+    font-family: inherit;
+
+    &:focus {
+      border-color: $kb-primary;
+    }
+  }
+
+  &__textarea {
+    background-color: $kb-surface;
+    border: 1px solid $kb-line;
+    border-radius: 10px;
+    padding: 16px;
+    font-size: 15px;
+    color: $kb-text;
+    min-height: 100px; // Min-height for textarea should be 100px per design notes
+    outline: none;
+    resize: vertical;
+    font-family: inherit;
+
+    &:focus {
+      border-color: $kb-primary;
+    }
+  }
+
+  &__submit-btn {
+    background-color: $kb-primary;
+    color: #ffffff;
+    border: none;
+    border-radius: 10px;
+    padding: 14px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+
+    &:hover:not(:disabled) {
+      background-color: $kb-primary-dark;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+}

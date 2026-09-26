@@ -1,0 +1,229 @@
+@use '../../styles/variables' as *;
+
+.complaint-desk-screen {
+  padding: 24px;
+  height: 100%;
+  overflow-y: auto;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__title {
+    font-size: 20px;
+    font-weight: 800;
+    color: $kb-text;
+    margin: 0;
+  }
+
+  &__subtitle {
+    font-size: 13px;
+    color: $kb-text-muted;
+    margin: 4px 0 0;
+  }
+
+  &__counters {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  &__table-wrapper {
+    background-color: $kb-surface;
+    border: 1px solid $kb-line;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  }
+
+  &__loading,
+  &__empty {
+    padding: 40px;
+    text-align: center;
+    color: $kb-text-muted;
+    font-size: 14px;
+  }
+}
+
+/* Counters */
+.desk-counter {
+  background-color: $kb-surface;
+  border: 1px solid $kb-line;
+  border-radius: 8px;
+  padding: 8px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+
+  &__val {
+    font-size: 18px;
+    font-weight: 800;
+    color: $kb-text;
+  }
+
+  &__lbl {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: $kb-text-muted;
+    letter-spacing: 0.3px;
+  }
+
+  &--review {
+    border-color: #fde68a;
+    background-color: #fffbeb;
+
+    .desk-counter__val {
+      color: $kb-accent;
+    }
+  }
+
+  &--resolved {
+    border-color: #a7f3d0;
+    background-color: #ecfdf5;
+
+    .desk-counter__val {
+      color: $kb-ontime;
+    }
+  }
+}
+
+/* Data Table */
+.desk-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 13px;
+
+  thead th {
+    background-color: #f8fafc;
+    color: $kb-text-muted;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 14px 16px;
+    border-bottom: 1px solid $kb-line;
+  }
+
+  tbody td {
+    padding: 14px 16px;
+    border-bottom: 1px solid $kb-line;
+    color: $kb-text;
+    vertical-align: middle;
+  }
+
+  &__row {
+    transition: background-color 0.15s ease;
+
+    &:hover {
+      background-color: #f8fafc;
+    }
+
+    &:last-child td {
+      border-bottom: none;
+    }
+  }
+
+  &__num {
+    font-family: monospace;
+    font-weight: 700;
+    color: $kb-text;
+    white-space: nowrap;
+  }
+
+  &__route-bus {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+  }
+
+  &__route-badge {
+    background-color: $kb-primary;
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+
+  &__bus-reg {
+    font-family: monospace;
+    font-size: 12px;
+    color: $kb-text-muted;
+  }
+
+  &__category-tag {
+    display: inline-block;
+    background-color: #f1f5f9;
+    color: $kb-ink;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+
+  &__desc {
+    max-width: 380px;
+  }
+
+  &__desc-text {
+    margin: 0;
+    line-height: 1.4;
+    color: $kb-text;
+  }
+
+  &__res-note {
+    display: block;
+    margin-top: 4px;
+    font-size: 11px;
+    color: #166534;
+    background-color: #f0fdf4;
+    padding: 2px 6px;
+    border-radius: 4px;
+    border-left: 2px solid $kb-ontime;
+  }
+
+  &__date {
+    color: $kb-muted;
+    white-space: nowrap;
+  }
+}
+
+/* Status Badges: using existing status styling tokens */
+.desk-status-pill {
+  display: inline-block;
+  background-color: $kb-surface;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+
+  &--submitted {
+    border: 1px solid $kb-line;
+    color: $kb-muted; // $kb-muted for submitted
+  }
+
+  &--in_review {
+    border: 1px solid rgba(217, 119, 6, 0.3);
+    color: $kb-accent; // $kb-accent for in_review
+  }
+
+  &--resolved,
+  &--closed {
+    border: 1px solid rgba(21, 128, 61, 0.3);
+    color: $kb-ontime; // $kb-ontime for resolved/closed
+  }
+}

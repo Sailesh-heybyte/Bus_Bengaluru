@@ -1,0 +1,263 @@
+@use '../../styles/variables' as *;
+
+.schemes-screen {
+  min-height: 100vh;
+  background-color: $kb-bg;
+  color: $kb-text;
+  font-family: 'Noto Sans Kannada', 'Noto Sans', sans-serif;
+  box-sizing: border-box;
+
+  &__content {
+    padding: 72px 16px 84px; // 56px TopBar + 16px, 60px BottomNav + 24px
+    max-width: 600px;
+    margin: 0 auto;
+    box-sizing: border-box;
+  }
+
+  &__skeletons {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  &__cards-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+}
+
+.schemes-card {
+  background-color: $kb-surface;
+  border: 1px solid $kb-line;
+  border-radius: 14px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  padding: 18px;
+  gap: 16px;
+
+  /* Subtle top accent border denoting active official status */
+  &__accent-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, $kb-primary, #991b1b);
+  }
+
+  &__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  &__title-group {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  &__authority {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: $kb-primary;
+  }
+
+  &__title {
+    font-size: 18px;
+    font-weight: 800;
+    color: $kb-text;
+    margin: 0;
+    line-height: 1.25;
+  }
+
+  &__status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background-color: #ecfdf5;
+    color: $kb-ontime;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    flex-shrink: 0;
+  }
+
+  &__status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: $kb-ontime;
+  }
+
+  &__digital-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background-color: #e0f2fe;
+    color: #0369a1;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 8px;
+    flex-shrink: 0;
+
+    i {
+      font-size: 12px;
+    }
+  }
+
+  /* Key-value Grid */
+  &__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px 16px;
+    background-color: #f8fafc;
+    border-radius: 10px;
+    padding: 14px;
+    border: 1px solid #f1f5f9;
+
+    @media (max-width: 360px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+
+    &--full {
+      grid-column: 1 / -1;
+    }
+  }
+
+  &__label {
+    font-size: 11px;
+    font-weight: 600;
+    color: $kb-text-muted;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+
+  &__val {
+    font-size: 14px;
+    font-weight: 600;
+    color: $kb-text;
+
+    &--highlight {
+      font-size: 16px;
+      font-weight: 700;
+      color: $kb-text;
+    }
+
+    &--mono {
+      font-family: monospace;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    &--muted {
+      color: $kb-text-muted;
+      font-size: 13px;
+    }
+  }
+
+  /* Reimbursement Narrative Highlight */
+  &__highlight-box {
+    background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+    border: 1px solid #bbf7d0;
+    border-radius: 10px;
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  &__stat-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__stat-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+    &--reimburse {
+      text-align: right;
+    }
+  }
+
+  &__stat-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #166534;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+
+  &__stat-num {
+    font-size: 18px;
+    font-weight: 800;
+    color: #14532d;
+  }
+
+  &__stat-amount {
+    font-size: 20px;
+    font-weight: 800;
+    color: $kb-ontime; // Emphasize fare reimbursed in $kb-ontime per design notes
+  }
+
+  &__divider {
+    width: 1px;
+    height: 32px;
+    background-color: #86efac;
+    margin: 0 12px;
+  }
+
+  &__badge-footer {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #15803d;
+    padding-top: 6px;
+    border-top: 1px dashed #86efac;
+
+    i {
+      font-size: 13px;
+    }
+  }
+
+  &__pass-footer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    color: $kb-text-muted;
+    background-color: #f8fafc;
+    border: 1px dashed $kb-line;
+    border-radius: 8px;
+    padding: 8px 12px;
+
+    i {
+      font-size: 14px;
+      color: $kb-primary;
+    }
+  }
+}

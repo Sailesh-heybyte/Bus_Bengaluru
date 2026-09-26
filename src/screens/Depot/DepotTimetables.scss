@@ -1,0 +1,179 @@
+@use '../../styles/variables' as *;
+
+.depot-timetables-screen {
+  padding: 24px;
+  height: 100%;
+  overflow-y: auto;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__title {
+    font-size: 20px;
+    font-weight: 800;
+    color: $kb-text;
+    margin: 0;
+  }
+
+  &__subtitle {
+    font-size: 13px;
+    color: $kb-text-muted;
+    margin: 4px 0 0;
+  }
+
+  &__summary-pill {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: $kb-surface;
+    border: 1px solid $kb-line;
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 12px;
+    font-weight: 700;
+    color: $kb-text;
+
+    i {
+      color: $kb-primary;
+      font-size: 14px;
+    }
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__loading {
+    padding: 40px;
+    text-align: center;
+    color: $kb-text-muted;
+    font-size: 14px;
+  }
+}
+
+/* Timetables Grid */
+.timetable-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+  gap: 16px;
+}
+
+.timetable-card {
+  background-color: $kb-surface;
+  border: 1px solid $kb-line;
+  border-radius: 12px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__route-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  &__route-badge {
+    background-color: $kb-primary;
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.3px;
+  }
+
+  &__corp-tag {
+    background-color: #f1f5f9;
+    color: $kb-text-muted;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+
+  &__direction {
+    font-size: 11px;
+    font-weight: 600;
+    color: $kb-text-muted;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+
+  &__path {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    color: $kb-text;
+
+    i {
+      color: #94a3b8;
+      font-size: 12px;
+    }
+  }
+
+  &__stop {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__departures-section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background-color: #f8fafc;
+    border: 1px solid #f1f5f9;
+    border-radius: 8px;
+    padding: 10px 12px;
+  }
+
+  &__dep-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: $kb-text-muted;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+
+  &__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  &__chip {
+    background-color: $kb-surface;
+    border: 1px solid $kb-line;
+    border-radius: 4px;
+    padding: 3px 8px;
+    font-size: 12px;
+    font-weight: 700;
+    font-family: monospace;
+    color: $kb-text;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+  }
+}

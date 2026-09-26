@@ -1,0 +1,210 @@
+@use '../../styles/variables' as *;
+
+.search-screen {
+  min-height: 100vh;
+  background-color: $kb-bg;
+  color: $kb-ink;
+  font-family: 'Noto Sans Kannada', 'Noto Sans', sans-serif;
+  box-sizing: border-box;
+
+  &__content {
+    padding: 72px 16px 84px; // 56px TopBar + 16px top, 60px BottomNav + 24px bottom
+    max-width: 600px;
+    margin: 0 auto;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  // 3-segment Tab Control
+  &__tabs {
+    display: flex;
+    border-bottom: 2px solid $kb-line;
+    background-color: transparent;
+    padding: 0;
+  }
+
+  &__tab {
+    flex: 1;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    padding: 10px 8px;
+    font-size: 15px;
+    font-weight: 500;
+    color: $kb-muted;
+    cursor: pointer;
+    text-align: center;
+    transition: color 0.15s ease-out, border-color 0.15s ease-out;
+
+    &:hover {
+      color: $kb-ink;
+    }
+
+    &--active {
+      color: $kb-ink;
+      font-weight: 700;
+      border-bottom: 2px solid $kb-primary;
+    }
+  }
+
+  // Search Inputs
+  &__inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  &__places-inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  &__input {
+    width: 100%;
+    height: 44px;
+    background-color: $kb-surface;
+    border: 1px solid $kb-line;
+    border-radius: $kb-radius;
+    padding: 0 16px;
+    font-size: 15px;
+    color: $kb-ink;
+    font-family: inherit;
+    box-sizing: border-box;
+    outline: none;
+    transition: border-color 0.15s ease-out, box-shadow 0.15s ease-out;
+
+    &::placeholder {
+      color: $kb-muted;
+    }
+
+    &:focus {
+      border-color: $kb-primary;
+      box-shadow: 0 0 0 3px rgba(133, 19, 19, 0.1);
+    }
+  }
+
+  // Skeletons
+  &__skeletons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  // Empty state
+  &__empty {
+    background-color: $kb-surface;
+    border: 1px dashed $kb-line;
+    border-radius: $kb-radius;
+    padding: 32px 16px;
+    text-align: center;
+  }
+
+  &__empty-text {
+    font-size: 15px;
+    color: $kb-muted;
+    margin: 0;
+  }
+
+  // Results list
+  &__results-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  &__card {
+    background-color: $kb-surface;
+    border: 1px solid $kb-line;
+    border-radius: $kb-radius;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+    box-sizing: border-box;
+    cursor: pointer;
+    transition: background-color 0.15s ease-out, box-shadow 0.15s ease-out;
+
+    &:hover,
+    &:focus-visible {
+      background-color: #fafbfc;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+      outline: none;
+    }
+  }
+
+  // Route card specific
+  &__route-info {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 0;
+  }
+
+  &__route-number {
+    font-size: 17px;
+    font-weight: 700;
+    color: $kb-ink;
+    line-height: 1.2;
+  }
+
+  &__route-path {
+    font-size: 13px;
+    color: $kb-muted;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__corporation {
+    font-size: 12px;
+    font-weight: 600;
+    color: $kb-muted;
+    background-color: $kb-bg;
+    border: 1px solid $kb-line;
+    padding: 4px 8px;
+    border-radius: 4px;
+    flex-shrink: 0;
+    margin-left: 10px;
+  }
+
+  // Stop card specific
+  &__stop-info {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 0;
+  }
+
+  &__stop-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: $kb-ink;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__stop-meta {
+    font-size: 13px;
+    color: $kb-muted;
+    font-weight: 500;
+  }
+
+  &__chevron {
+    color: $kb-muted;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-left: 8px;
+  }
+}

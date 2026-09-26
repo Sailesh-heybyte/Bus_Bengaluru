@@ -1,0 +1,223 @@
+.splash-screen {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 99999;
+  background: linear-gradient(180deg, #38bdf8 0%, #0284c7 45%, #0369a1 75%, #075985 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  overflow: hidden;
+  font-family: 'Noto Sans Kannada', 'Noto Sans', system-ui, -apple-system, sans-serif;
+  user-select: none;
+
+  &__header {
+    margin-top: 18vh;
+    padding: 0 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    animation: splash-fade-in 0.6s ease-out;
+  }
+
+  &__brand {
+    font-size: 34px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    color: #ffffff;
+    text-transform: uppercase;
+    margin: 0;
+    line-height: 1.1;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  &__subtitle {
+    font-size: 15px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.95);
+    margin: 0;
+    letter-spacing: 0.3px;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+  }
+
+  &__graphic {
+    width: 100%;
+    max-width: 480px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    position: relative;
+    animation: splash-slide-up 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+}
+
+/* Front-facing Bus CSS placeholder block */
+.splash-bus-wrapper {
+  position: relative;
+  z-index: 2;
+  margin-bottom: -18px; /* sits directly onto the road horizon */
+  filter: drop-shadow(0 10px 14px rgba(0, 0, 0, 0.28));
+}
+
+.splash-bus {
+  width: 110px;
+  height: 118px;
+  background: #ffffff;
+  border-radius: 18px 18px 8px 8px;
+  box-shadow: inset 0 -3px 0 #cbd5e1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 10px 6px;
+  box-sizing: border-box;
+  position: relative;
+
+  /* Top destination sign */
+  &__sign {
+    width: 100%;
+    height: 18px;
+    background-color: #0f172a;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 6px;
+    box-sizing: border-box;
+    margin-bottom: 6px;
+
+    &-text {
+      color: #38bdf8;
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 1px;
+    }
+
+    &-dot {
+      width: 4px;
+      height: 4px;
+      background-color: #fbbf24;
+      border-radius: 50%;
+    }
+  }
+
+  /* Windshield */
+  &__windshield {
+    width: 100%;
+    height: 42px;
+    background: linear-gradient(180deg, #0284c7 0%, #38bdf8 100%);
+    border-radius: 6px;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 6px;
+    border: 1.5px solid #0f172a;
+
+    .splash-bus__reflection {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0) 60%);
+    }
+  }
+
+  /* Front grille & headlights */
+  &__face {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 2px;
+  }
+
+  &__headlight {
+    width: 14px;
+    height: 14px;
+    background: #fef08a;
+    border: 1.5px solid #64748b;
+    border-radius: 50%;
+    box-shadow: 0 0 6px rgba(253, 224, 71, 0.8);
+  }
+
+  &__grille {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    width: 38px;
+    align-items: center;
+
+    &-line {
+      width: 100%;
+      height: 2px;
+      background-color: #94a3b8;
+      border-radius: 1px;
+    }
+  }
+
+  /* Bumper */
+  &__bumper {
+    width: 106%;
+    height: 8px;
+    background-color: #334155;
+    border-radius: 4px;
+    margin-top: auto;
+  }
+
+  /* Wheels */
+  &__wheel {
+    position: absolute;
+    bottom: -6px;
+    width: 14px;
+    height: 14px;
+    background-color: #0f172a;
+    border-radius: 3px;
+
+    &--left {
+      left: 10px;
+    }
+
+    &--right {
+      right: 10px;
+    }
+  }
+}
+
+/* Road Graphic Container */
+.splash-road-container {
+  width: 100%;
+  line-height: 0;
+}
+
+.splash-road {
+  width: 100%;
+  height: 160px;
+  display: block;
+}
+
+/* Subtle entrance animations */
+@keyframes splash-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes splash-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
