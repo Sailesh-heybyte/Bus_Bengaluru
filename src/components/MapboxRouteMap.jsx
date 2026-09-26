@@ -37,9 +37,8 @@ export function MapboxRouteMap({
 }) {
   const mapContainerRef = useRef(null);
   const mapInstanceRef = useRef(null);
-  const stopMarkersRef = useRef([]);
+  const startMarkerRef = useRef(null);
   const busMarkersRef = useRef(new Map());
-  const arrowMarkersRef = useRef([]);
 
   const [activeStyle, setActiveStyle] = useState('navigation');
   const [showStyleMenu, setShowStyleMenu] = useState(false);
@@ -63,12 +62,8 @@ export function MapboxRouteMap({
 
   // Initialize Mapbox Map
   useEffect(() => {
-    const token = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
-    if (!token) {
-      console.warn('Missing VITE_MAPBOX_ACCESS_TOKEN in .env');
-    }
-
-    mapboxgl.accessToken = token || '';
+    const token = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN || '';
+    mapboxgl.accessToken = token;
 
     if (!mapContainerRef.current) return;
 
@@ -85,13 +80,14 @@ export function MapboxRouteMap({
       container: mapContainerRef.current,
       style: currentStyleUrl,
       center: initialCenter,
-      zoom: 13,
+      zoom: 12,
       attributionControl: false,
     });
 
     mapInstanceRef.current = map;
 
     map.on('load', () => {
+      map.resize();
       setMapLoaded(true);
     });
 
@@ -99,7 +95,7 @@ export function MapboxRouteMap({
       map.remove();
       mapInstanceRef.current = null;
     };
-  }, []); // Run once on mount
+  }, []);
 
   // Switch style when activeStyle changes
   const handleSelectStyle = (styleId) => {
@@ -111,42 +107,47 @@ export function MapboxRouteMap({
     if (styleObj) {
       map.setStyle(styleObj.url);
       map.once('style.load', () => {
-        // Re-add layers after style load
-        renderRouteLayers();
+        renderRouteAndStops();
       });
     }
   };
 
-  // Fit bounds to the route
+  // Fit camera bounds to the route
   const fitRouteBounds = useCallback(() => {
     const map = mapInstanceRef.current;
     if (!map) return;
 
     const points =
       roadPathData.densePath.length > 0 ? roadPathData.densePath : validStops;
-    if (points.length === 0) return;
+    if (points.length < 2) return;
 
     const bounds = new mapboxgl.LngLatBounds();
     points.forEach((p) => {
-      bounds.extend([p.lng || p.longitude, p.lat || p.latitude]);
+      const lng = p.lng || p.longitude;
+      const lat = p.lat || p.latitude;
+      if (typeof lng === 'number' && typeof lat === 'number') {
+        bounds.extend([lng, lat]);
+      }
     });
 
+    map.resize();
     map.fitBounds(bounds, {
-      padding: { top: 70, bottom: 270, left: 40, right: 40 },
+      padding: { top: 80, bottom: 280, left: 40, right: 40 },
       maxZoom: 14.5,
-      duration: 1000,
+      duration: 800,
     });
   }, [roadPathData, validStops]);
 
-  // Render the GeoJSON road line layer
-  const renderRouteLayers = useCallback(() => {
+  // Render the GeoJSON road line layer AND native stop circle layer
+  const renderRouteAndStops = useCallback(() => {
     const map = mapInstanceRef.current;
     if (!map || !map.isStyleLoaded()) return;
 
     const coordinates = roadPathData.densePath.map((p) => [p.lng, p.lat]);
     if (coordinates.length < 2) return;
 
-    const geojsonData = {
+    // 1. Route Polyline Layer
+    const lineGeoJson = {
       type: 'Feature',
       properties: {},
       geometry: {
@@ -155,17 +156,16 @@ export function MapboxRouteMap({
       },
     };
 
-    // Remove existing layer and source if present
     if (map.getLayer('route-line-casing')) map.removeLayer('route-line-casing');
     if (map.getLayer('route-line-main')) map.removeLayer('route-line-main');
     if (map.getSource('route-line-source')) map.removeSource('route-line-source');
 
     map.addSource('route-line-source', {
       type: 'geojson',
-      data: geojsonData,
+      data: lineGeoJson,
     });
 
-    // White outline casing for crisp contrast
+    // White outline casing
     map.addLayer({
       id: 'route-line-casing',
       type: 'line',
@@ -177,11 +177,11 @@ export function MapboxRouteMap({
       paint: {
         'line-color': '#FFFFFF',
         'line-width': 8,
-        'line-opacity': 0.85,
+        'line-opacity': 0.9,
       },
     });
 
-    // Main solid black navigation route line
+    // Solid black navigation line
     map.addLayer({
       id: 'route-line-main',
       type: 'line',
@@ -197,94 +197,103 @@ export function MapboxRouteMap({
       },
     });
 
-    // Render repeating directional arrow markers along the road line
-    arrowMarkersRef.current.forEach((m) => m.remove());
-    arrowMarkersRef.current = [];
-
-    const step = Math.max(12, Math.floor(roadPathData.densePath.length / 18));
-    for (let i = step; i < roadPathData.densePath.length - 2; i += step) {
-      const p1 = roadPathData.densePath[i];
-      const p2 = roadPathData.densePath[i + 1];
-      if (!p1 || !p2) continue;
-
-      const bearing = computeBearing(p1.lat, p1.lng, p2.lat, p2.lng);
-      const arrowEl = document.createElement('div');
-      arrowEl.className = 'mapbox-route-map__direction-arrow';
-      arrowEl.innerHTML = `
-        <svg width="14" height="14" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
-          <polygon points="7,2 12,11 7,8.5 2,11" fill="#FFFFFF" stroke="#111827" stroke-width="1.2" />
-        </svg>
-      `;
-
-      const marker = new mapboxgl.Marker({
-        element: arrowEl,
-        rotationAlignment: 'map',
-        pitchAlignment: 'map',
-        rotation: bearing,
-      })
-        .setLngLat([p1.lng, p1.lat])
-        .addTo(map);
-
-      arrowMarkersRef.current.push(marker);
-    }
-  }, [roadPathData]);
-
-  // Update Route Line when roadPathData or mapLoaded changes
-  useEffect(() => {
-    if (!mapLoaded) return;
-    renderRouteLayers();
-    fitRouteBounds();
-  }, [mapLoaded, roadPathData, renderRouteLayers, fitRouteBounds]);
-
-  // Render Stop Markers (Circles + Start Badge) snapped to the road
-  useEffect(() => {
-    const map = mapInstanceRef.current;
-    if (!map || !mapLoaded) return;
-
-    stopMarkersRef.current.forEach((m) => m.remove());
-    stopMarkersRef.current = [];
-
+    // 2. Native WebGL Stop Circle Layer (Zero CSS alignment bugs)
     const { densePath, stopIndexToRoadIndex } = roadPathData;
-
-    validStops.forEach((stop, index) => {
-      const isStart = index === 0;
+    const stopFeatures = validStops.map((stop, index) => {
       const roadIdx = stopIndexToRoadIndex[index];
       const pos =
         typeof roadIdx === 'number' && densePath[roadIdx]
           ? [densePath[roadIdx].lng, densePath[roadIdx].lat]
           : [stop.longitude, stop.latitude];
 
-      const el = document.createElement('div');
-      el.className = 'mapbox-route-map__stop-marker';
-      el.innerHTML = `
-        ${
-          isStart
-            ? `<div class="mapbox-route-map__start-badge">Start</div>`
-            : ''
-        }
-        <div class="mapbox-route-map__stop-circle"></div>
-      `;
-
-      const popup = new mapboxgl.Popup({ offset: 12, closeButton: false }).setHTML(`
-        <div style="font-family: -apple-system, sans-serif; font-size: 13px; font-weight: 600; color: #111;">
-          ${stop.name}
-          <div style="font-size: 11px; font-weight: 400; color: #666; margin-top: 2px;">
-            ${stop.stopCode || stop.stop_code || ''}
-          </div>
-        </div>
-      `);
-
-      const marker = new mapboxgl.Marker({
-        element: el,
-        anchor: 'center',
-      })
-        .setLngLat(pos)
-        .setPopup(popup)
-        .addTo(map);
-
-      stopMarkersRef.current.push(marker);
+      return {
+        type: 'Feature',
+        properties: {
+          id: stop.id,
+          name: stop.name,
+          stopCode: stop.stopCode || stop.stop_code || '',
+        },
+        geometry: {
+          type: 'Point',
+          coordinates: pos,
+        },
+      };
     });
-  }, [mapLoaded, validStops, roadPathData]);
+
+    const stopsGeoJson = {
+      type: 'FeatureCollection',
+      features: stopFeatures,
+    };
+
+    if (map.getLayer('stops-layer')) map.removeLayer('stops-layer');
+    if (map.getSource('stops-source')) map.removeSource('stops-source');
+
+    map.addSource('stops-source', {
+      type: 'geojson',
+      data: stopsGeoJson,
+    });
+
+    map.addLayer({
+      id: 'stops-layer',
+      type: 'circle',
+      source: 'stops-source',
+      paint: {
+        'circle-radius': 5.5,
+        'circle-color': '#FFFFFF',
+        'circle-stroke-color': '#111827',
+        'circle-stroke-width': 2.5,
+      },
+    });
+
+    // Click on stop opens popup
+    map.on('click', 'stops-layer', (e) => {
+      const feature = e.features?.[0];
+      if (!feature) return;
+
+      const coordinates = feature.geometry.coordinates.slice();
+      const { name, stopCode } = feature.properties;
+
+      new mapboxgl.Popup({ offset: 12 })
+        .setLngLat(coordinates)
+        .setHTML(`
+          <div style="font-family: -apple-system, sans-serif; font-size: 13px; font-weight: 600; color: #111;">
+            ${name}
+            <div style="font-size: 11px; font-weight: 400; color: #666; margin-top: 2px;">
+              ${stopCode}
+            </div>
+          </div>
+        `)
+        .addTo(map);
+    });
+
+    // 3. Start Terminal Badge at Origin Stop
+    if (startMarkerRef.current) {
+      startMarkerRef.current.remove();
+      startMarkerRef.current = null;
+    }
+
+    if (stopFeatures.length > 0) {
+      const startCoord = stopFeatures[0].geometry.coordinates;
+      const startBadgeEl = document.createElement('div');
+      startBadgeEl.className = 'mapbox-route-map__start-badge';
+      startBadgeEl.innerText = 'Start';
+
+      startMarkerRef.current = new mapboxgl.Marker({
+        element: startBadgeEl,
+        anchor: 'bottom',
+        offset: [0, -8],
+      })
+        .setLngLat(startCoord)
+        .addTo(map);
+    }
+  }, [roadPathData, validStops]);
+
+  // Update Route and Stops when mapLoaded or roadPathData changes
+  useEffect(() => {
+    if (!mapLoaded) return;
+    renderRouteAndStops();
+    fitRouteBounds();
+  }, [mapLoaded, roadPathData, renderRouteAndStops, fitRouteBounds]);
 
   // Render Live Directional Bus Marker
   useEffect(() => {
@@ -346,7 +355,6 @@ export function MapboxRouteMap({
       let marker = currentMarkers.get(bus.id);
 
       if (!marker) {
-        // Create custom Mapbox Bus Marker Element
         const busEl = document.createElement('div');
         busEl.className = 'mapbox-route-map__bus-marker';
         busEl.innerHTML = `
