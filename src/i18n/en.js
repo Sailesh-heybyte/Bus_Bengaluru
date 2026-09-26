@@ -265,5 +265,11 @@ export default {
   transit_alert: "Transit Alert",
   tap_to_view: "Tap to view details",
   unread: "Unread",
-  new_notification: "New notification received"
+  new_notification: "New notification received",
+  recent_searches: "Recent Searches",
+  from_station: "Enter station or stop",
+  to_station: "Enter destination",
+  from_label: "From",
+  to_label: "To",
+  clear_history: "Clear"
 };

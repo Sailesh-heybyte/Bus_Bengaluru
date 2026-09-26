@@ -1,210 +1,402 @@
 @use '../../styles/variables' as *;
 
-.search-screen {
-  min-height: 100vh;
-  background-color: $kb-bg;
-  color: $kb-ink;
-  font-family: 'Noto Sans Kannada', 'Noto Sans', sans-serif;
+.search-page {
+  min-height: 100dvh;
+  background-color: #ffffff;
+  color: #0f172a;
+  font-family: 'Plus Jakarta Sans', 'Inter', 'Noto Sans Kannada', sans-serif;
   box-sizing: border-box;
+  padding-bottom: 92px; // Clearance for fixed BottomNav
+  max-width: 480px;
+  margin: 0 auto;
+  position: relative;
+  overflow-x: hidden;
 
-  &__content {
-    padding: 72px 16px 84px; // 56px TopBar + 16px top, 60px BottomNav + 24px bottom
-    max-width: 600px;
-    margin: 0 auto;
+  /* 1. Sky Blue Hero Header */
+  &__hero {
+    background: linear-gradient(180deg, #38bdf8 0%, #0284c7 100%);
+    padding: 18px 16px 20px;
     box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
+    position: relative;
+    overflow: hidden;
   }
 
-  // 3-segment Tab Control
-  &__tabs {
-    display: flex;
-    border-bottom: 2px solid $kb-line;
-    background-color: transparent;
-    padding: 0;
-  }
-
-  &__tab {
-    flex: 1;
-    background: none;
-    border: none;
-    border-bottom: 2px solid transparent;
-    margin-bottom: -2px;
-    padding: 10px 8px;
-    font-size: 15px;
-    font-weight: 500;
-    color: $kb-muted;
-    cursor: pointer;
-    text-align: center;
-    transition: color 0.15s ease-out, border-color 0.15s ease-out;
-
-    &:hover {
-      color: $kb-ink;
-    }
-
-    &--active {
-      color: $kb-ink;
-      font-weight: 700;
-      border-bottom: 2px solid $kb-primary;
-    }
-  }
-
-  // Search Inputs
-  &__inputs {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  &__places-inputs {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  &__input {
-    width: 100%;
-    height: 44px;
-    background-color: $kb-surface;
-    border: 1px solid $kb-line;
-    border-radius: $kb-radius;
-    padding: 0 16px;
-    font-size: 15px;
-    color: $kb-ink;
-    font-family: inherit;
-    box-sizing: border-box;
-    outline: none;
-    transition: border-color 0.15s ease-out, box-shadow 0.15s ease-out;
-
-    &::placeholder {
-      color: $kb-muted;
-    }
-
-    &:focus {
-      border-color: $kb-primary;
-      box-shadow: 0 0 0 3px rgba(133, 19, 19, 0.1);
-    }
-  }
-
-  // Skeletons
-  &__skeletons {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  // Empty state
-  &__empty {
-    background-color: $kb-surface;
-    border: 1px dashed $kb-line;
-    border-radius: $kb-radius;
-    padding: 32px 16px;
-    text-align: center;
-  }
-
-  &__empty-text {
-    font-size: 15px;
-    color: $kb-muted;
-    margin: 0;
-  }
-
-  // Results list
-  &__results-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  &__card {
-    background-color: $kb-surface;
-    border: 1px solid $kb-line;
-    border-radius: $kb-radius;
-    padding: 14px 16px;
+  &__nav-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
-    box-sizing: border-box;
-    cursor: pointer;
-    transition: background-color 0.15s ease-out, box-shadow 0.15s ease-out;
-
-    &:hover,
-    &:focus-visible {
-      background-color: #fafbfc;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
-      outline: none;
-    }
+    margin-bottom: 12px;
+    position: relative;
+    z-index: 2;
   }
 
-  // Route card specific
-  &__route-info {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-    min-width: 0;
-  }
-
-  &__route-number {
-    font-size: 17px;
-    font-weight: 700;
-    color: $kb-ink;
-    line-height: 1.2;
-  }
-
-  &__route-path {
-    font-size: 13px;
-    color: $kb-muted;
-    font-weight: 500;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  &__corporation {
-    font-size: 12px;
-    font-weight: 600;
-    color: $kb-muted;
-    background-color: $kb-bg;
-    border: 1px solid $kb-line;
-    padding: 4px 8px;
-    border-radius: 4px;
-    flex-shrink: 0;
-    margin-left: 10px;
-  }
-
-  // Stop card specific
-  &__stop-info {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-    min-width: 0;
-  }
-
-  &__stop-name {
-    font-size: 15px;
-    font-weight: 600;
-    color: $kb-ink;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  &__stop-meta {
-    font-size: 13px;
-    color: $kb-muted;
-    font-weight: 500;
-  }
-
-  &__chevron {
-    color: $kb-muted;
+  &__back-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    color: #ffffff;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.35);
+      transform: scale(1.05);
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+  }
+
+  &__mode-toggle {
+    display: flex;
+    background: rgba(15, 23, 42, 0.18);
+    border-radius: 999px;
+    padding: 3px;
+    gap: 2px;
+  }
+
+  &__mode-btn {
+    background: transparent;
+    border: none;
+    border-radius: 999px;
+    padding: 5px 16px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.85);
+    cursor: pointer;
+    transition: all 0.18s ease;
+
+    &--active {
+      background: #ffffff;
+      color: #0284c7;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+    }
+  }
+
+  &__nav-spacer {
+    width: 36px;
+  }
+
+  /* Vehicle Graphic Area */
+  &__vehicle-wrap {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    height: 120px;
+    margin-top: -6px;
+  }
+
+  &__vehicle-img {
+    height: 88px;
+    width: auto;
+    object-fit: contain;
+    user-select: none;
+    pointer-events: none;
+    z-index: 2;
+    filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.12));
+    transition: transform 0.25s ease;
+
+    &--bus {
+      height: 94px;
+    }
+
+    &--mrt {
+      height: 84px;
+    }
+  }
+
+  &__track-line {
+    width: 100%;
+    height: 4px;
+    background-color: #0369a1;
+    margin-top: -2px;
+    border-radius: 2px;
+    opacity: 0.9;
+  }
+
+  /* 2. Floating From/To Journey Card */
+  &__floating-container {
+    padding: 0 16px;
+    position: relative;
+    z-index: 5;
+    margin-top: -26px;
+  }
+}
+
+.search-journey-card {
+  background: #ffffff;
+  border-radius: 22px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  padding: 16px 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  position: relative;
+
+  &__timeline {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    height: 76px;
+    padding: 4px 0;
+  }
+
+  &__pin {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+
+    &--from {
+      color: #38bdf8;
+    }
+
+    &--to {
+      color: #0f172a;
+    }
+  }
+
+  &__line {
+    width: 2px;
+    flex: 1;
+    background-color: #cbd5e1;
+    margin: 4px 0;
+    border-radius: 1px;
+  }
+
+  &__fields {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  &__group {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #94a3b8;
+    margin-bottom: 2px;
+    letter-spacing: 0.02em;
+  }
+
+  &__input {
+    border: none;
+    outline: none;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: #0f172a;
+    padding: 2px 0;
+    background: transparent;
+    width: 100%;
+
+    &::placeholder {
+      color: #cbd5e1;
+      font-weight: 500;
+    }
+  }
+
+  &__divider {
+    height: 1px;
+    background-color: #f1f5f9;
+    margin: 6px 0;
+  }
+
+  &__swap-btn {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    color: #64748b;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    cursor: pointer;
     flex-shrink: 0;
-    margin-left: 8px;
+    transition: all 0.15s ease;
+
+    &:hover {
+      background: #f1f5f9;
+      color: #0284c7;
+      border-color: #cbd5e1;
+      transform: rotate(180deg);
+    }
+  }
+}
+
+/* 3. Recent Searches in place of Choose Schedule */
+.search-page__body {
+  padding: 24px 20px 0;
+}
+
+.search-page__section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.search-page__section-title {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.search-page__clear-btn {
+  background: none;
+  border: none;
+  color: #94a3b8;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 4px 6px;
+  transition: color 0.15s ease;
+
+  &:hover {
+    color: #ef4444;
+  }
+}
+
+/* Schedule List Item matching reference layout */
+.search-schedule-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.search-schedule-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 4px;
+  border-bottom: 1px solid #f1f5f9;
+  transition: background-color 0.12s ease;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &__left {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  &__time-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  &__station-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  &__icon {
+    font-size: 11px;
+    color: #94a3b8;
+    flex-shrink: 0;
+  }
+
+  &__time {
+    font-size: 13px;
+    font-weight: 700;
+    color: #0f172a;
+    letter-spacing: -0.01em;
+  }
+
+  &__station {
+    font-size: 12px;
+    font-weight: 500;
+    color: #64748b;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 5px;
+    flex-shrink: 0;
+    margin-left: 14px;
+  }
+
+  &__fare {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 800;
+    color: #0f172a;
+  }
+
+  &__select-btn {
+    background-color: #0284c7;
+    color: #ffffff;
+    border: none;
+    border-radius: 999px;
+    padding: 5px 16px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(2, 132, 199, 0.25);
+    transition: all 0.15s ease;
+
+    &:hover {
+      background-color: #0369a1;
+      transform: scale(1.04);
+    }
+
+    &:active {
+      transform: scale(0.96);
+    }
+  }
+}
+
+.search-page__empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: #94a3b8;
+
+  &__empty-icon {
+    font-size: 32px;
+    margin-bottom: 8px;
+    color: #cbd5e1;
+  }
+
+  &__empty-text {
+    font-size: 14px;
+    font-weight: 500;
+    margin: 0;
   }
 }

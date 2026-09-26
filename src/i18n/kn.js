@@ -265,5 +265,11 @@ export default {
   transit_alert: "ಸಾರಿಗೆ ಅಲರ್ಟ್",
   tap_to_view: "ವಿವರಗಳಿಗಾಗಿ ಟ್ಯಾಪ್ ಮಾಡಿ",
   unread: "ಓದಿಲ್ಲ",
-  new_notification: "ಹೊಸ ಅಧಿಸೂಚನೆ ಬಂದಿದೆ"
+  new_notification: "ಹೊಸ ಅಧಿಸೂಚನೆ ಬಂದಿದೆ",
+  recent_searches: "ಇತ್ತೀಚಿನ ಹುಡುಕಾಟಗಳು",
+  from_station: "ಆರಂಭಿಕ ನಿಲ್ದಾಣ ನಮೂದಿಸಿ",
+  to_station: "ಗಮ್ಯಸ್ಥಾನ ನಮೂದಿಸಿ",
+  from_label: "ಇಂದ",
+  to_label: "ವರೆಗೆ",
+  clear_history: "ತೆರವು"
 };
