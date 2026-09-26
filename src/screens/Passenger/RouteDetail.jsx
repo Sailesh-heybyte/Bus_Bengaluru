@@ -7,7 +7,7 @@ import { useLanguage } from '../../context/LanguageContext';
 import { useSimulation } from '../../context/SimulationContext';
 import { useNetwork } from '../../hooks/useNetwork';
 import OfflineStrip from '../../components/OfflineStrip';
-import GoogleRouteMap from '../../components/GoogleRouteMap';
+import MapboxRouteMap from '../../components/MapboxRouteMap';
 import SwipeableStopsSheet from '../../components/SwipeableStopsSheet';
 import './RouteDetail.scss';
 
@@ -72,8 +72,8 @@ export function RouteDetail() {
       ) : (
         routeDetail && (
           <>
-            {/* Full Screen Google Maps Layer */}
-            <GoogleRouteMap
+            {/* Full Screen Mapbox Layer */}
+            <MapboxRouteMap
               routeId={id}
               stops={routeDetail.stops}
               liveBuses={trackedBuses}
