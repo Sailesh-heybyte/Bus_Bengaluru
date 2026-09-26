@@ -49,6 +49,9 @@ export function RouteDetail() {
     return routeMatch && isRunning;
   });
 
+  // Track the primary active bus for synchronized live tracking
+  const trackedBuses = activeBuses.length > 0 ? [activeBuses[0]] : [];
+
   const handleStopClick = (stopId) => {
     navigate(`/stop/${stopId}`);
   };
@@ -72,7 +75,7 @@ export function RouteDetail() {
             {/* Full Screen Google Maps Layer */}
             <GoogleRouteMap
               stops={routeDetail.stops}
-              liveBuses={activeBuses}
+              liveBuses={trackedBuses}
               onBack={() => navigate(-1)}
             />
 
@@ -80,7 +83,7 @@ export function RouteDetail() {
             <SwipeableStopsSheet
               route={routeDetail.route}
               stops={routeDetail.stops}
-              liveBuses={activeBuses}
+              liveBuses={trackedBuses}
               onStopClick={handleStopClick}
               onBack={() => navigate(-1)}
               isSaved={isSaved}

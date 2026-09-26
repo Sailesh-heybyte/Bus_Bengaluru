@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { HashRouter, Routes, Route, Outlet, Navigate } from 'react-router-dom';
+import { HashRouter, Routes, Route, Outlet, Navigate, useLocation } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { LanguageProvider } from './context/LanguageContext';
 import { SimulationProvider } from './context/SimulationContext';
@@ -27,15 +27,18 @@ import DepotTimetables from './screens/Depot/DepotTimetables';
 
 function PassengerLayout() {
   const { isAuthenticated } = useAuth();
+  const location = useLocation();
 
   if (!isAuthenticated) {
     return <Onboarding />;
   }
 
+  const isLiveRouteTracking = location.pathname.startsWith('/route');
+
   return (
-    <div className="passenger-layout">
+    <div className={`passenger-layout ${isLiveRouteTracking ? 'passenger-layout--tracking' : ''}`}>
       <Outlet />
-      <BottomNav />
+      {!isLiveRouteTracking && <BottomNav />}
     </div>
   );
 }

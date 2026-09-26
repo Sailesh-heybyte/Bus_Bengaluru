@@ -279,5 +279,15 @@
     display: flex;
     align-items: center;
     gap: 4px;
+    flex-wrap: wrap;
+
+    i {
+      font-size: 12px;
+    }
+
+    .swipeable-stops-sheet__next-direction {
+      color: #6b7280;
+      font-weight: 500;
+    }
   }
 }

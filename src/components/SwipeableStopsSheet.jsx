@@ -214,7 +214,12 @@ export function SwipeableStopsSheet({
                   </span>
                   {activeBusHere && (
                     <span className="swipeable-stops-sheet__live-tag">
-                      Live • {activeBusHere.registrationNumber?.split(' ').pop()}
+                      <i className="bi bi-broadcast" /> Live • {activeBusHere.registrationNumber?.split(' ').pop()}
+                      {index < stops.length - 1 && (
+                        <span className="swipeable-stops-sheet__next-direction">
+                          {' '}→ {stops[index + 1]?.name}
+                        </span>
+                      )}
                     </span>
                   )}
                 </div>
@@ -227,7 +232,7 @@ export function SwipeableStopsSheet({
   );
 }
 
-// Helper hook to map active buses to their closest stop index
+// Helper hook to map active buses to their current stop index
 function useMemoBusPositions(stops, liveBuses) {
   return React.useMemo(() => {
     const map = new Map();
@@ -240,11 +245,11 @@ function useMemoBusPositions(stops, liveBuses) {
         typeof bus.progress === 'number'
           ? bus.progress
           : (bus.currentStopIndex ?? 0);
-      const roundedIndex = Math.min(
+      const stopIndex = Math.min(
         stops.length - 1,
-        Math.max(0, Math.round(progress))
+        Math.max(0, Math.floor(progress))
       );
-      map.set(roundedIndex, bus);
+      map.set(stopIndex, bus);
     });
 
     return map;
