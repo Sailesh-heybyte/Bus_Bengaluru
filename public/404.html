@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Redirecting...</title>
+    <script>
+      // SPA Fallback: converts pathname to hash route so refresh/direct link never 404s
+      (function () {
+        var path = window.location.pathname;
+        var search = window.location.search;
+        var hash = window.location.hash;
+        
+        // Handle repo sub-folder hosting if present
+        var segments = path.split('/').filter(Boolean);
+        var repoPrefix = '';
+        if (segments.length > 0 && segments[0] === 'Bus_Bengaluru') {
+          repoPrefix = '/' + segments.shift();
+        }
+
+        var routePath = '/' + segments.join('/');
+        var target = repoPrefix + '/#' + (routePath === '/' ? '' : routePath) + search + hash;
+        window.location.replace(target);
+      })();
+    </script>
+  </head>
+  <body>
+    <p>Redirecting to application...</p>
+  </body>
+</html>

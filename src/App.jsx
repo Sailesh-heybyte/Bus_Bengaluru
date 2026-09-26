@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
+import { HashRouter, Routes, Route, Outlet, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { LanguageProvider } from './context/LanguageContext';
 import { SimulationProvider } from './context/SimulationContext';
@@ -60,7 +60,7 @@ export function App() {
   }
 
   return (
-    <BrowserRouter>
+    <HashRouter>
       <AuthProvider>
         <LanguageProvider>
           <SimulationProvider>
@@ -90,11 +90,14 @@ export function App() {
               <Route path="complaints" element={<ComplaintDesk />} />
               <Route path="timetables" element={<DepotTimetables />} />
             </Route>
+
+            {/* Wildcard Fallback Route */}
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </SimulationProvider>
       </LanguageProvider>
       </AuthProvider>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 

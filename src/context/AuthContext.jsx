@@ -10,23 +10,35 @@ export const AuthContext = createContext({
 });
 
 export function AuthProvider({ children }) {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
+  const [user, setUser] = useState(() => {
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {
         const parsed = JSON.parse(stored);
         if (parsed && parsed.phone) {
-          setUser(parsed);
-          setIsAuthenticated(true);
+          return parsed;
         }
       }
     } catch (e) {
       console.error('Error reading auth from localStorage:', e);
     }
-  }, []);
+    return null;
+  });
+
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (parsed && parsed.phone) {
+          return true;
+        }
+      }
+    } catch (e) {
+      console.error('Error reading auth from localStorage:', e);
+    }
+    return false;
+  });
 
   const login = (phone) => {
     const userData = {
