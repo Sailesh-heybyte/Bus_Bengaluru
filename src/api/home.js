@@ -32,12 +32,18 @@ export function toUiRoute(apiRoute) {
 export function toUiNotice(apiNotice) {
   return {
     id: apiNotice.id,
+    category: apiNotice.category || 'notice',
     type: apiNotice.type,
     routeId: apiNotice.route_id,
+    title: apiNotice.title || 'Transit Notice',
+    titleKn: apiNotice.title_kn || 'ಸಾರಿಗೆ ಸೂಚನೆ',
     message: apiNotice.message,
     messageKn: apiNotice.message_kn,
+    timeAgo: apiNotice.time_ago || 'Just now',
+    timeAgoKn: apiNotice.time_ago_kn || 'ಈಗಷ್ಟೇ',
     createdAt: apiNotice.created_at,
-    expiresAt: apiNotice.expires_at
+    expiresAt: apiNotice.expires_at,
+    read: !!apiNotice.read
   };
 }
 

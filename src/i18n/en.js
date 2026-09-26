@@ -252,5 +252,18 @@ export default {
   schemes_sub: "Shakti Scheme & Student Passes",
   tickets_sub: "Passes, Tickets & NCMC Card",
   alerts_sub: "Live Delays & Service Updates",
-  complaints_sub: "Grievance Redressal & Support"
+  complaints_sub: "Grievance Redressal & Support",
+  notifications: "Notifications",
+  circulars: "Circulars",
+  notices: "Notices",
+  all: "All",
+  mark_all_read: "Mark all as read",
+  no_notifications: "No notifications right now",
+  just_now: "Just now",
+  simulate_notice: "Simulate Alert",
+  circulars_advisories: "Circulars & Advisories",
+  transit_alert: "Transit Alert",
+  tap_to_view: "Tap to view details",
+  unread: "Unread",
+  new_notification: "New notification received"
 };

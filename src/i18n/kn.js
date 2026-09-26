@@ -252,5 +252,18 @@ export default {
   schemes_sub: "ಶಕ್ತಿ ಯೋಜನೆ ಮತ್ತು ವಿದ್ಯಾರ್ಥಿ ಪಾಸ್‌ಗಳು",
   tickets_sub: "ಪಾಸ್‌ಗಳು, ಟಿಕೆಟ್‌ಗಳು ಮತ್ತು NCMC ಕಾರ್ಡ್",
   alerts_sub: "ಲೈವ್ ವಿಳಂಬಗಳು ಮತ್ತು ಸೇವಾ ನವೀಕರಣಗಳು",
-  complaints_sub: "ದೂರು ಪರಿಹಾರ ಮತ್ತು ಬೆಂಬಲ"
+  complaints_sub: "ದೂರು ಪರಿಹಾರ ಮತ್ತು ಬೆಂಬಲ",
+  notifications: "ಅಧಿಸೂಚನೆಗಳು",
+  circulars: "ಸುತ್ತೋಲೆಗಳು",
+  notices: "ಸೂಚನೆಗಳು",
+  all: "ಎಲ್ಲವೂ",
+  mark_all_read: "ಎಲ್ಲವನ್ನೂ ಓದಲಾಗಿದೆ ಎಂದು ಗುರುತಿಸಿ",
+  no_notifications: "ಯಾವುದೇ ಹೊಸ ಅಧಿಸೂಚನೆಗಳಿಲ್ಲ",
+  just_now: "ಈಗಷ್ಟೇ",
+  simulate_notice: "ಅಲರ್ಟ್ ಸಿಮ್ಯುಲೇಟ್ ಮಾಡಿ",
+  circulars_advisories: "ಸುತ್ತೋಲೆಗಳು ಮತ್ತು ಸಲಹೆಗಳು",
+  transit_alert: "ಸಾರಿಗೆ ಅಲರ್ಟ್",
+  tap_to_view: "ವಿವರಗಳಿಗಾಗಿ ಟ್ಯಾಪ್ ಮಾಡಿ",
+  unread: "ಓದಿಲ್ಲ",
+  new_notification: "ಹೊಸ ಅಧಿಸೂಚನೆ ಬಂದಿದೆ"
 };
