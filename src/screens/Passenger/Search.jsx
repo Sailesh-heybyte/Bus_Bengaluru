@@ -292,7 +292,18 @@ export function Search() {
         {searchResults.length > 0 ? (
           <ul className="search-schedule-list" role="list">
             {searchResults.map((route) => (
-              <li key={route.id} className="search-schedule-item">
+              <li
+                key={route.id}
+                className="search-schedule-item"
+                onClick={() => navigate(`/route/${route.id}`)}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    navigate(`/route/${route.id}`);
+                  }
+                }}
+              >
                 <div className="search-schedule-item__left">
                   <div className="search-schedule-item__time-row">
                     <i className="bi bi-clock search-schedule-item__icon" />
@@ -312,26 +323,31 @@ export function Search() {
                   <span className="search-schedule-item__fare">
                     ₹ {route.baseFare || 25}
                   </span>
-                  <button
-                    type="button"
-                    className="search-schedule-item__select-btn"
-                    onClick={() => navigate(`/route/${route.id}`)}
-                  >
-                    {t('select')}
-                  </button>
+                  <i className="bi bi-chevron-right search-schedule-item__chevron" aria-hidden="true" />
                 </div>
               </li>
             ))}
           </ul>
         ) : activeSearches.length > 0 ? (
-          /* Recent Searches List formatted identical to reference image */
+          /* Recent Searches List - Tap anywhere to redirect */
           <ul className="search-schedule-list" role="list">
             {activeSearches.map((item) => {
               const stationLabel =
                 language === 'kn' && item.stationKn ? item.stationKn : item.station;
 
               return (
-                <li key={item.id} className="search-schedule-item">
+                <li
+                  key={item.id}
+                  className="search-schedule-item"
+                  onClick={() => handleSelectRecent(item)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      handleSelectRecent(item);
+                    }
+                  }}
+                >
                   <div className="search-schedule-item__left">
                     <div className="search-schedule-item__time-row">
                       <i className="bi bi-clock search-schedule-item__icon" />
@@ -349,13 +365,7 @@ export function Search() {
                     <span className="search-schedule-item__fare">
                       {transportMode === 'mrt' ? '$' : '₹'} {item.fare}
                     </span>
-                    <button
-                      type="button"
-                      className="search-schedule-item__select-btn"
-                      onClick={() => handleSelectRecent(item)}
-                    >
-                      {t('select')}
-                    </button>
+                    <i className="bi bi-chevron-right search-schedule-item__chevron" aria-hidden="true" />
                   </div>
                 </li>
               );
