@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import TopBar from '../../components/TopBar';
 import LoadingRow from '../../components/LoadingRow';
-import Sheet from '../../components/Sheet';
 import { getTicketsAndPasses } from '../../api/tickets';
 import { useDebouncedLoading } from '../../hooks/useDebouncedLoading';
 import { useLanguage } from '../../context/LanguageContext';
@@ -12,7 +11,7 @@ export function Tickets() {
   const [activeSegment, setActiveSegment] = useState('tickets'); // 'tickets' | 'passes'
   const [ticketsData, setTicketsData] = useState({ tickets: [], passes: [] });
   const [isLoading, setIsLoading] = useState(true);
-  const [activeSheet, setActiveSheet] = useState(null); // null | 'intercity' | 'ncmc'
+  const [selectedTicketModal, setSelectedTicketModal] = useState(null); // ticket object | null
 
   const showLoading = useDebouncedLoading(isLoading, 200);
 
@@ -31,7 +30,7 @@ export function Tickets() {
     if (!isoString) return '';
     try {
       const d = new Date(isoString);
-      return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+      return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
     } catch {
       return isoString;
     }
@@ -41,10 +40,23 @@ export function Tickets() {
     if (!isoString) return '';
     try {
       const d = new Date(isoString);
-      return d.toLocaleDateString([], { day: '2-digit', month: 'short', year: 'numeric' });
+      return d.toLocaleDateString([], { month: 'short', day: 'numeric', weekday: 'short' });
     } catch {
       return isoString;
     }
+  };
+
+  // Helper to generate a 3-letter station code just like CDG / FLR in airport transit passes
+  const getStopCode = (name) => {
+    if (!name) return 'STN';
+    const words = name.replace(/[^a-zA-Z\s]/g, '').trim().split(/\s+/);
+    if (words.length >= 3) {
+      return (words[0][0] + words[1][0] + words[2][0]).toUpperCase();
+    }
+    if (words.length === 2) {
+      return (words[0].slice(0, 2) + words[1][0]).toUpperCase();
+    }
+    return words[0].slice(0, 3).toUpperCase();
   };
 
   return (
@@ -86,54 +98,7 @@ export function Tickets() {
           </div>
         ) : activeSegment === 'tickets' ? (
           <div className="tickets-screen__tab-content">
-            {/* Quick Mock Actions: Intercity Booking & NCMC Card */}
-            <div className="tickets-screen__action-grid">
-              <button
-                type="button"
-                className="tickets-screen__action-card"
-                onClick={() => setActiveSheet('intercity')}
-                aria-label={t('intercity_booking')}
-              >
-                <div className="tickets-screen__action-icon tickets-screen__action-icon--ksrtc">
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <rect x="3" y="4" width="18" height="15" rx="3" />
-                    <circle cx="7.5" cy="15.5" r="1.5" />
-                    <circle cx="16.5" cy="15.5" r="1.5" />
-                    <path d="M3 10h18" />
-                  </svg>
-                </div>
-                <div className="tickets-screen__action-info">
-                  <span className="tickets-screen__action-title">{t('intercity_booking')}</span>
-                  <span className="tickets-screen__action-sub">{t('ksrtc_intercity_sub')}</span>
-                </div>
-                <svg className="tickets-screen__action-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                  <polyline points="9 18 15 12 9 6" />
-                </svg>
-              </button>
-
-              <button
-                type="button"
-                className="tickets-screen__action-card"
-                onClick={() => setActiveSheet('ncmc')}
-                aria-label={t('ncmc_card')}
-              >
-                <div className="tickets-screen__action-icon tickets-screen__action-icon--ncmc">
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <rect x="2" y="5" width="20" height="14" rx="2" />
-                    <line x1="2" y1="10" x2="22" y2="10" />
-                  </svg>
-                </div>
-                <div className="tickets-screen__action-info">
-                  <span className="tickets-screen__action-title">{t('ncmc_card')}</span>
-                  <span className="tickets-screen__action-sub">{t('ncmc_card_sub')}</span>
-                </div>
-                <svg className="tickets-screen__action-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                  <polyline points="9 18 15 12 9 6" />
-                </svg>
-              </button>
-            </div>
-
-            {/* Active Ticket */}
+            {/* Active Ticket Spotlight Card */}
             {activeTicket && (
               <section className="tickets-screen__active-section" aria-label={t('active_ticket')}>
                 <div className="tickets-screen__section-header">
@@ -144,8 +109,16 @@ export function Tickets() {
                   </span>
                 </div>
 
-                <div className="tickets-screen__active-card">
-                  {/* Accent Top Bar */}
+                <div
+                  className="tickets-screen__active-card"
+                  onClick={() => setSelectedTicketModal(activeTicket)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') setSelectedTicketModal(activeTicket);
+                  }}
+                >
+                  {/* Top Accent Strip */}
                   <div className="tickets-screen__active-accent-bar" />
 
                   <div className="tickets-screen__active-header">
@@ -156,7 +129,7 @@ export function Tickets() {
                     <div className="tickets-screen__fare-tag">₹{activeTicket.fareAmount}</div>
                   </div>
 
-                  {/* Route Stops */}
+                  {/* Route Stops Flow */}
                   <div className="tickets-screen__route-flow">
                     <div className="tickets-screen__stop-node">
                       <div className="tickets-screen__stop-point tickets-screen__stop-point--origin" />
@@ -167,7 +140,7 @@ export function Tickets() {
                     </div>
 
                     <div className="tickets-screen__route-line">
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                         <polyline points="7 13 12 18 17 13" />
                         <line x1="12" y1="6" x2="12" y2="18" />
                       </svg>
@@ -182,37 +155,37 @@ export function Tickets() {
                     </div>
                   </div>
 
-                  {/* QR Box & Validity */}
-                  <div className="tickets-screen__qr-box">
-                    <div className="tickets-screen__qr-graphic" aria-label={t('qr_code')}>
-                      <svg width="72" height="72" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M2 2h8v8H2V2zm2 2v4h4V4H4zm10-2h8v8h-8V2zm2 2v4h4V4h-4zM2 14h8v8H2v-8zm2 2v4h4v-4H4zm14 2h2v4h-2v-4zm-4-4h2v2h-2v-2zm2 2h2v2h-2v-2zm2-2h4v2h-4v-2zm2 4h2v2h-2v-2zm-6 2h4v2h-4v-2zM5 5h2v2H5V5zm12 0h2v2h-2V5zM5 17h2v2H5v-2z" />
-                      </svg>
-                      <span className="tickets-screen__qr-payload">{activeTicket.ticketNumber}</span>
+                  {/* Bottom Action Ribbon */}
+                  <div className="tickets-screen__active-ribbon">
+                    <div className="tickets-screen__valid-box">
+                      <span className="tickets-screen__valid-label">{t('valid_until')}</span>
+                      <span className="tickets-screen__valid-time">{formatTime(activeTicket.validUntil)}</span>
                     </div>
 
-                    <div className="tickets-screen__qr-details">
-                      <div className="tickets-screen__valid-box">
-                        <span className="tickets-screen__valid-label">{t('valid_until')}</span>
-                        <span className="tickets-screen__valid-time">{formatTime(activeTicket.validUntil)}</span>
-                      </div>
-                      <p className="tickets-screen__qr-hint">{t('tap_to_view_qr')}</p>
-                      <div className="tickets-screen__ticket-tags">
-                        <span className="tickets-screen__tag">{activeTicket.paymentMethod.toUpperCase()}</span>
-                        <span className="tickets-screen__tag">{t('single_journey')}</span>
-                      </div>
+                    <div className="tickets-screen__open-pass-btn">
+                      <span>View Boarding Pass & QR</span>
+                      <i className="bi bi-chevron-right" />
                     </div>
                   </div>
                 </div>
               </section>
             )}
 
-            {/* Past Tickets */}
+            {/* Tickets History List */}
             <section className="tickets-screen__past-section" aria-label={t('past_tickets')}>
               <h2 className="tickets-screen__section-title">{t('past_tickets')}</h2>
               <ul className="tickets-screen__past-list" role="list">
                 {pastTickets.map((ticket) => (
-                  <li key={ticket.id} className="tickets-screen__past-item">
+                  <li
+                    key={ticket.id}
+                    className="tickets-screen__past-item"
+                    onClick={() => setSelectedTicketModal(ticket)}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') setSelectedTicketModal(ticket);
+                    }}
+                  >
                     <div className="tickets-screen__past-main">
                       <div className="tickets-screen__past-badges">
                         <span className="tickets-screen__past-route">{ticket.routeNumber}</span>
@@ -231,7 +204,8 @@ export function Tickets() {
                     </div>
                     <div className="tickets-screen__past-end">
                       <span className="tickets-screen__past-fare">₹{ticket.fareAmount}</span>
-                      <span className="tickets-screen__past-status">{t('used')}</span>
+                      <span className="tickets-screen__past-status">{ticket.status === 'active' ? t('active') : t('used')}</span>
+                      <i className="bi bi-chevron-right tickets-screen__past-chevron" aria-hidden="true" />
                     </div>
                   </li>
                 ))}
@@ -248,44 +222,43 @@ export function Tickets() {
                 const statusLabel = isExpiring ? t('expiring_soon') : t('active');
 
                 return (
-                  <div
-                    key={pass.id}
-                    className={`tickets-screen__pass-card ${
-                      isExpiring ? 'tickets-screen__pass-card--expiring' : ''
-                    }`}
-                  >
-                    <div className="tickets-screen__pass-accent-bar" />
-
+                  <div key={pass.id} className="tickets-screen__pass-card">
+                    {/* Pass Top Accent Header */}
                     <div className="tickets-screen__pass-header">
-                      <div className="tickets-screen__pass-badges">
-                        <span className="tickets-screen__pass-corp">{pass.corporation}</span>
-                        <span className="tickets-screen__pass-type">{passTypeLabel}</span>
+                      <div className="tickets-screen__pass-corp-wrap">
+                        <span className="tickets-screen__pass-corp-badge">{pass.corporation}</span>
+                        <span className="tickets-screen__pass-type-title">{passTypeLabel}</span>
                       </div>
                       <span
                         className={`tickets-screen__pass-status-pill ${
-                          isExpiring ? 'tickets-screen__pass-status-pill--expiring' : 'tickets-screen__pass-status-pill--active'
+                          isExpiring ? 'tickets-screen__pass-status-pill--expiring' : ''
                         }`}
                       >
                         {statusLabel}
                       </span>
                     </div>
 
+                    {/* Pass Main Body */}
                     <div className="tickets-screen__pass-body">
-                      <div className="tickets-screen__pass-number-row">
-                        <span className="tickets-screen__pass-num-label">{t('pass_number')}</span>
-                        <span className="tickets-screen__pass-number">{pass.passNumber}</span>
+                      <div className="tickets-screen__pass-row">
+                        <span className="tickets-screen__pass-label">{t('pass_number')}</span>
+                        <span className="tickets-screen__pass-num-val">{pass.passNumber}</span>
                       </div>
 
                       <div className="tickets-screen__pass-row">
-                        <span className="tickets-screen__pass-row-label">{t('zone')}</span>
-                        <span className="tickets-screen__pass-row-val">{pass.zoneOrRoute}</span>
+                        <span className="tickets-screen__pass-label">{t('zone_coverage')}</span>
+                        <span className="tickets-screen__pass-val">{pass.zoneOrRoute}</span>
                       </div>
 
-                      <div className="tickets-screen__pass-row">
-                        <span className="tickets-screen__pass-row-label">{t('valid_until')}</span>
-                        <span className="tickets-screen__pass-row-val">
-                          {formatDate(pass.validFrom)} - {formatDate(pass.validTo)}
-                        </span>
+                      <div className="tickets-screen__pass-dates-grid">
+                        <div>
+                          <span className="tickets-screen__pass-label">{t('valid_from')}</span>
+                          <span className="tickets-screen__pass-date-val">{formatDate(pass.validFrom)}</span>
+                        </div>
+                        <div>
+                          <span className="tickets-screen__pass-label">{t('valid_to')}</span>
+                          <span className="tickets-screen__pass-date-val">{formatDate(pass.validTo)}</span>
+                        </div>
                       </div>
                     </div>
 
@@ -309,86 +282,230 @@ export function Tickets() {
         )}
       </main>
 
-      {/* Intercity Booking Sheet */}
-      <Sheet
-        isOpen={activeSheet === 'intercity'}
-        onClose={() => setActiveSheet(null)}
-        title={t('intercity_booking')}
-      >
-        <div className="tickets-sheet">
-          <div className="tickets-sheet__banner">{t('sample_data_notice')}</div>
-
-          <div className="tickets-sheet__form">
-            <div className="tickets-sheet__field">
-              <label className="tickets-sheet__label">{t('intercity_from')}</label>
-              <input
-                type="text"
-                className="tickets-sheet__input"
-                readOnly
-                value="Bengaluru (Kempegowda BS)"
-              />
-            </div>
-
-            <div className="tickets-sheet__field">
-              <label className="tickets-sheet__label">{t('intercity_to')}</label>
-              <input
-                type="text"
-                className="tickets-sheet__input"
-                readOnly
-                value="Mysuru (Suburban BS)"
-              />
-            </div>
-
-            <div className="tickets-sheet__field">
-              <label className="tickets-sheet__label">{t('intercity_date')}</label>
-              <input
-                type="text"
-                className="tickets-sheet__input"
-                readOnly
-                value="26 Sep 2026"
-              />
-            </div>
-
-            <button type="button" className="tickets-sheet__btn" disabled>
-              {t('search_intercity_buses')}
+      {/* BOARDING PASS MODAL (Pixel-perfect to Reference Image) */}
+      {selectedTicketModal && (
+        <div
+          className="boarding-pass-overlay"
+          onClick={() => setSelectedTicketModal(null)}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="boarding-pass-title"
+        >
+          <div
+            className="boarding-pass-card"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Overlay Close Button */}
+            <button
+              type="button"
+              className="boarding-pass-card__close-btn"
+              onClick={() => setSelectedTicketModal(null)}
+              aria-label={t('close') || 'Close'}
+            >
+              <i className="bi bi-x-lg" />
             </button>
-          </div>
-        </div>
-      </Sheet>
 
-      {/* NCMC Card Sheet */}
-      <Sheet
-        isOpen={activeSheet === 'ncmc'}
-        onClose={() => setActiveSheet(null)}
-        title={t('ncmc_card')}
-      >
-        <div className="tickets-sheet">
-          <div className="tickets-sheet__banner">{t('sample_data_notice')}</div>
-
-          {/* RuPay NCMC Mock Card Graphic */}
-          <div className="tickets-sheet__ncmc-card">
-            <div className="tickets-sheet__ncmc-top">
-              <span className="tickets-sheet__ncmc-chip" />
-              <span className="tickets-sheet__ncmc-brand">{t('rupay_ncmc')}</span>
-            </div>
-
-            <div className="tickets-sheet__ncmc-number">•••• •••• •••• 4289</div>
-
-            <div className="tickets-sheet__ncmc-bottom">
-              <div>
-                <span className="tickets-sheet__ncmc-label">{t('ncmc_card_holder')}</span>
-                <span className="tickets-sheet__ncmc-val">S. Kumar</span>
+            {/* TOP CARD SECTION */}
+            <div className="boarding-pass-card__top">
+              {/* FROM ○ ------------ 🚌 ------------ ● TO */}
+              <div className="boarding-pass-card__flight-track">
+                <span className="boarding-pass-card__track-endpoint">FROM ○</span>
+                <div className="boarding-pass-card__track-middle">
+                  <span className="boarding-pass-card__track-duration">45 minutes</span>
+                  <div className="boarding-pass-card__track-pill">Direct</div>
+                  <div className="boarding-pass-card__track-dash" />
+                  <div className="boarding-pass-card__track-bus-icon">
+                    <i className="bi bi-bus-front-fill" />
+                  </div>
+                </div>
+                <span className="boarding-pass-card__track-endpoint">● TO</span>
               </div>
-              <div className="tickets-sheet__ncmc-status-badge">{t('linked')}</div>
+
+              {/* STATIONS & TIMES ROW */}
+              <div className="boarding-pass-card__stations-grid">
+                {/* Origin */}
+                <div className="boarding-pass-card__station-col boarding-pass-card__station-col--from">
+                  <h2 className="boarding-pass-card__code">
+                    {getStopCode(selectedTicketModal.fromStopName)}
+                  </h2>
+                  <p className="boarding-pass-card__stop-full">
+                    {selectedTicketModal.fromStopName}
+                  </p>
+                  <div className="boarding-pass-card__time">
+                    {formatTime(selectedTicketModal.issuedAt) || '09:30 AM'}
+                  </div>
+                  <div className="boarding-pass-card__date">
+                    {formatDate(selectedTicketModal.issuedAt) || 'Sep 26, Sat'}
+                  </div>
+                </div>
+
+                {/* Destination */}
+                <div className="boarding-pass-card__station-col boarding-pass-card__station-col--to">
+                  <h2 className="boarding-pass-card__code">
+                    {getStopCode(selectedTicketModal.toStopName)}
+                  </h2>
+                  <p className="boarding-pass-card__stop-full">
+                    {selectedTicketModal.toStopName}
+                  </p>
+                  <div className="boarding-pass-card__time">
+                    {formatTime(selectedTicketModal.validUntil) || '11:15 AM'}
+                  </div>
+                  <div className="boarding-pass-card__date">
+                    {formatDate(selectedTicketModal.validUntil || selectedTicketModal.issuedAt) || 'Sep 26, Sat'}
+                  </div>
+                </div>
+              </div>
+
+              {/* POWDER BLUE HIGHLIGHTED MIDDLE BAR */}
+              <div className="boarding-pass-card__mid-bar">
+                <div className="boarding-pass-card__mid-col">
+                  <span className="boarding-pass-card__mid-label">Boarding time</span>
+                  <span className="boarding-pass-card__mid-val">
+                    {formatTime(selectedTicketModal.issuedAt) || '09:00 AM'}
+                  </span>
+                </div>
+                <div className="boarding-pass-card__mid-col">
+                  <span className="boarding-pass-card__mid-label">Route</span>
+                  <span className="boarding-pass-card__mid-val">
+                    {selectedTicketModal.routeNumber || '500D'}
+                  </span>
+                </div>
+                <div className="boarding-pass-card__mid-col">
+                  <span className="boarding-pass-card__mid-label">Bay</span>
+                  <span className="boarding-pass-card__mid-val">Bay 3</span>
+                </div>
+                <div className="boarding-pass-card__mid-col">
+                  <span className="boarding-pass-card__mid-label">Bus No</span>
+                  <span className="boarding-pass-card__mid-val">KA-01-F-4012</span>
+                </div>
+              </div>
+
+              {/* PASSENGER & FARE DETAILS ROW */}
+              <div className="boarding-pass-card__passenger-row">
+                <div className="boarding-pass-card__pass-col">
+                  <span className="boarding-pass-card__pass-label">Passenger</span>
+                  <span className="boarding-pass-card__pass-val">Ravi Kumar</span>
+                </div>
+                <div className="boarding-pass-card__pass-col">
+                  <span className="boarding-pass-card__pass-label">Seat</span>
+                  <span className="boarding-pass-card__pass-val">General</span>
+                </div>
+                <div className="boarding-pass-card__pass-col">
+                  <span className="boarding-pass-card__pass-label">Fare</span>
+                  <span className="boarding-pass-card__pass-val">
+                    ₹{selectedTicketModal.fareAmount} ({selectedTicketModal.paymentMethod?.toUpperCase() || 'UPI'})
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* PERFORATION DIVIDER WITH NOTCHES */}
+            <div className="boarding-pass-card__perforation">
+              <div className="boarding-pass-card__notch boarding-pass-card__notch--left" />
+              <div className="boarding-pass-card__perforated-line" />
+              <div className="boarding-pass-card__notch boarding-pass-card__notch--right" />
+            </div>
+
+            {/* BOTTOM STUB: QR CODE IN PLACE OF BARCODE */}
+            <div className="boarding-pass-card__stub">
+              <div className="boarding-pass-card__qr-box">
+                {/* High-Definition Responsive QR Code Vector */}
+                <svg
+                  className="boarding-pass-card__qr-svg"
+                  viewBox="0 0 120 120"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <rect width="120" height="120" rx="10" fill="#FFFFFF" />
+
+                  {/* Corner Targets */}
+                  {/* Top-Left */}
+                  <rect x="10" y="10" width="30" height="30" rx="5" fill="#0F172A" />
+                  <rect x="16" y="16" width="18" height="18" rx="2" fill="#FFFFFF" />
+                  <rect x="21" y="21" width="8" height="8" rx="1" fill="#0F172A" />
+
+                  {/* Top-Right */}
+                  <rect x="80" y="10" width="30" height="30" rx="5" fill="#0F172A" />
+                  <rect x="86" y="16" width="18" height="18" rx="2" fill="#FFFFFF" />
+                  <rect x="91" y="21" width="8" height="8" rx="1" fill="#0F172A" />
+
+                  {/* Bottom-Left */}
+                  <rect x="10" y="80" width="30" height="30" rx="5" fill="#0F172A" />
+                  <rect x="16" y="86" width="18" height="18" rx="2" fill="#FFFFFF" />
+                  <rect x="21" y="91" width="8" height="8" rx="1" fill="#0F172A" />
+
+                  {/* Data patterns */}
+                  <rect x="46" y="12" width="6" height="6" fill="#0F172A" rx="1" />
+                  <rect x="58" y="12" width="6" height="6" fill="#0F172A" rx="1" />
+                  <rect x="68" y="12" width="6" height="6" fill="#0F172A" rx="1" />
+
+                  <rect x="46" y="24" width="8" height="6" fill="#0284C7" rx="1" />
+                  <rect x="58" y="24" width="8" height="6" fill="#0F172A" rx="1" />
+
+                  <rect x="46" y="36" width="6" height="6" fill="#0F172A" rx="1" />
+                  <rect x="56" y="36" width="6" height="6" fill="#0F172A" rx="1" />
+                  <rect x="68" y="36" width="6" height="6" fill="#0F172A" rx="1" />
+
+                  {/* Center Modules */}
+                  <rect x="20" y="48" width="6" height="6" fill="#0F172A" rx="1" />
+                  <rect x="32" y="48" width="8" height="6" fill="#0F172A" rx="1" />
+                  <rect x="46" y="48" width="8" height="8" fill="#0284C7" rx="1" />
+                  <rect x="60" y="48" width="6" height="6" fill="#0F172A" rx="1" />
+                  <rect x="72" y="48" width="8" height="6" fill="#0F172A" rx="1" />
+                  <rect x="86" y="48" width="6" height="6" fill="#0F172A" rx="1" />
+                  <rect x="98" y="48" width="8" height="6" fill="#0F172A" rx="1" />
+
+                  <rect x="14" y="60" width="8" height="6" fill="#0F172A" rx="1" />
+                  <rect x="28" y="60" width="6" height="6" fill="#0F172A" rx="1" />
+                  <rect x="42" y="60" width="8" height="6" fill="#0F172A" rx="1" />
+                  <rect x="56" y="60" width="8" height="8" fill="#0284C7" rx="1" />
+                  <rect x="70" y="60" width="6" height="6" fill="#0F172A" rx="1" />
+                  <rect x="82" y="60" width="8" height="6" fill="#0F172A" rx="1" />
+                  <rect x="96" y="60" width="6" height="6" fill="#0F172A" rx="1" />
+
+                  <rect x="20" y="70" width="6" height="6" fill="#0F172A" rx="1" />
+                  <rect x="34" y="70" width="8" height="6" fill="#0F172A" rx="1" />
+                  <rect x="48" y="70" width="6" height="6" fill="#0F172A" rx="1" />
+                  <rect x="62" y="70" width="8" height="6" fill="#0F172A" rx="1" />
+                  <rect x="76" y="70" width="6" height="6" fill="#0F172A" rx="1" />
+                  <rect x="90" y="70" width="8" height="6" fill="#0F172A" rx="1" />
+
+                  {/* Bottom Right cluster */}
+                  <rect x="48" y="84" width="8" height="6" fill="#0F172A" rx="1" />
+                  <rect x="62" y="84" width="6" height="6" fill="#0F172A" rx="1" />
+                  <rect x="74" y="84" width="8" height="8" fill="#0284C7" rx="1" />
+                  <rect x="88" y="84" width="6" height="6" fill="#0F172A" rx="1" />
+                  <rect x="100" y="84" width="6" height="6" fill="#0F172A" rx="1" />
+
+                  <rect x="48" y="96" width="6" height="6" fill="#0F172A" rx="1" />
+                  <rect x="60" y="96" width="8" height="6" fill="#0F172A" rx="1" />
+                  <rect x="74" y="96" width="6" height="6" fill="#0F172A" rx="1" />
+                  <rect x="86" y="96" width="8" height="6" fill="#0F172A" rx="1" />
+                  <rect x="100" y="96" width="6" height="6" fill="#0F172A" rx="1" />
+
+                  <rect x="54" y="106" width="8" height="6" fill="#0F172A" rx="1" />
+                  <rect x="68" y="106" width="6" height="6" fill="#0F172A" rx="1" />
+                  <rect x="80" y="106" width="8" height="6" fill="#0F172A" rx="1" />
+                  <rect x="94" y="106" width="8" height="6" fill="#0284C7" rx="1" />
+                </svg>
+              </div>
+
+              <div className="boarding-pass-card__stub-meta">
+                <span className="boarding-pass-card__stub-num">
+                  {selectedTicketModal.ticketNumber}
+                </span>
+                <div className="boarding-pass-card__stub-badge">
+                  <span className="boarding-pass-card__stub-dot" />
+                  <span>Conductor ETM Validated</span>
+                </div>
+                <p className="boarding-pass-card__stub-hint">
+                  Show QR to conductor upon boarding
+                </p>
+              </div>
             </div>
           </div>
-
-          <div className="tickets-sheet__balance-box">
-            <span className="tickets-sheet__balance-label">{t('ncmc_balance')}</span>
-            <span className="tickets-sheet__balance-amount">₹450.00</span>
-          </div>
         </div>
-      </Sheet>
+      )}
     </div>
   );
 }

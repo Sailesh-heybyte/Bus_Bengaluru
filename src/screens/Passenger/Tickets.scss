@@ -4,7 +4,7 @@
   min-height: 100vh;
   background-color: $kb-bg;
   color: $kb-text;
-  font-family: 'Noto Sans Kannada', 'Noto Sans', sans-serif;
+  font-family: 'Plus Jakarta Sans', 'Noto Sans Kannada', 'Noto Sans', sans-serif;
   box-sizing: border-box;
 
   &__content {
@@ -21,7 +21,7 @@
   &__segment-bar {
     display: flex;
     background-color: #e2e8f0;
-    border-radius: 10px;
+    border-radius: 12px;
     padding: 4px;
     gap: 4px;
   }
@@ -30,18 +30,18 @@
     flex: 1;
     border: none;
     background: transparent;
-    padding: 8px 16px;
+    padding: 10px 16px;
     font-size: 14px;
-    font-weight: 600;
+    font-weight: 700;
     color: $kb-text-muted;
-    border-radius: 8px;
+    border-radius: 9px;
     cursor: pointer;
     transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
 
     &--active {
-      background-color: $kb-surface;
-      color: $kb-primary;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      background-color: #ffffff;
+      color: #0284c7;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
     }
   }
 
@@ -57,91 +57,6 @@
     gap: 20px;
   }
 
-  /* Quick Actions (Intercity & NCMC) */
-  &__action-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-
-    @media (max-width: 360px) {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  &__action-card {
-    background-color: $kb-surface;
-    border: 1px solid $kb-line;
-    border-radius: 12px;
-    padding: 12px;
-    text-align: left;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    cursor: pointer;
-    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
-    position: relative;
-
-    &:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-      border-color: #cbd5e1;
-    }
-
-    &:active {
-      transform: translateY(0);
-    }
-  }
-
-  &__action-icon {
-    width: 36px;
-    height: 36px;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    &--ksrtc {
-      background-color: #fee2e2;
-      color: $kb-primary;
-    }
-
-    &--ncmc {
-      background-color: #e0f2fe;
-      color: #0284c7;
-    }
-  }
-
-  &__action-info {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-  }
-
-  &__action-title {
-    font-size: 13px;
-    font-weight: 700;
-    color: $kb-text;
-    line-height: 1.2;
-  }
-
-  &__action-sub {
-    font-size: 11px;
-    color: $kb-text-muted;
-    line-height: 1.3;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-
-  &__action-arrow {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    color: #94a3b8;
-  }
-
   /* Section Header */
   &__section-header {
     display: flex;
@@ -151,10 +66,11 @@
   }
 
   &__section-title {
-    font-size: 15px;
-    font-weight: 700;
-    color: $kb-text;
+    font-size: 16px;
+    font-weight: 800;
+    color: #0f172a;
     margin: 0;
+    letter-spacing: -0.01em;
   }
 
   &__live-pill {
@@ -162,31 +78,32 @@
     align-items: center;
     gap: 6px;
     background-color: #ecfdf5;
-    color: $kb-ontime;
+    color: #059669;
     font-size: 11px;
-    font-weight: 700;
-    padding: 3px 8px;
+    font-weight: 800;
+    padding: 4px 10px;
     border-radius: 12px;
     text-transform: uppercase;
-    letter-spacing: 0.3px;
+    letter-spacing: 0.5px;
+    border: 1px solid #a7f3d0;
   }
 
   &__live-dot {
     width: 6px;
     height: 6px;
     border-radius: 50%;
-    background-color: $kb-ontime;
-    animation: pulse 1.5s infinite;
+    background-color: #059669;
+    animation: live-pulse 1.6s infinite;
   }
 
-  @keyframes pulse {
+  @keyframes live-pulse {
     0% {
       opacity: 1;
       transform: scale(1);
     }
     50% {
-      opacity: 0.4;
-      transform: scale(0.8);
+      opacity: 0.35;
+      transform: scale(0.75);
     }
     100% {
       opacity: 1;
@@ -194,18 +111,30 @@
     }
   }
 
-  /* Active Ticket Card */
+  /* Active Ticket Spotlight Card */
   &__active-card {
-    background-color: $kb-surface;
-    border: 1px solid $kb-line;
-    border-radius: 14px;
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
     overflow: hidden;
     position: relative;
-    box-shadow: 0 4px 14px rgba(133, 19, 19, 0.08);
+    box-shadow: 0 6px 20px rgba(2, 132, 199, 0.1);
     display: flex;
     flex-direction: column;
     gap: 14px;
-    padding: 16px;
+    padding: 18px;
+    cursor: pointer;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(2, 132, 199, 0.16);
+      border-color: #38bdf8;
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
   }
 
   &__active-accent-bar {
@@ -214,7 +143,7 @@
     left: 0;
     right: 0;
     height: 5px;
-    background: linear-gradient(90deg, $kb-primary, #b91c1c);
+    background: linear-gradient(90deg, #0284c7 0%, #38bdf8 100%);
   }
 
   &__active-header {
@@ -231,26 +160,27 @@
   }
 
   &__route-badge {
-    background-color: $kb-primary;
+    background-color: #0284c7;
     color: #ffffff;
     font-size: 15px;
-    font-weight: 700;
+    font-weight: 800;
     padding: 4px 10px;
-    border-radius: 6px;
+    border-radius: 8px;
     letter-spacing: 0.3px;
   }
 
   &__ticket-num {
-    font-size: 12px;
-    font-weight: 600;
-    color: $kb-text-muted;
+    font-size: 13px;
+    font-weight: 700;
+    color: #64748b;
     letter-spacing: 0.5px;
+    font-family: monospace;
   }
 
   &__fare-tag {
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 800;
-    color: $kb-text;
+    color: #0f172a;
   }
 
   /* Route Flow */
@@ -260,7 +190,7 @@
     justify-content: space-between;
     background-color: #f8fafc;
     border: 1px solid #f1f5f9;
-    border-radius: 10px;
+    border-radius: 12px;
     padding: 12px 14px;
     gap: 8px;
   }
@@ -280,13 +210,13 @@
     flex-shrink: 0;
 
     &--origin {
-      background-color: $kb-primary;
-      box-shadow: 0 0 0 3px rgba(133, 19, 19, 0.2);
+      background-color: #0284c7;
+      box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.2);
     }
 
     &--dest {
-      background-color: $kb-ontime;
-      box-shadow: 0 0 0 3px rgba(21, 128, 61, 0.2);
+      background-color: #059669;
+      box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.2);
     }
   }
 
@@ -298,16 +228,16 @@
 
   &__stop-label {
     font-size: 10px;
-    font-weight: 600;
+    font-weight: 700;
     text-transform: uppercase;
-    color: $kb-text-muted;
+    color: #94a3b8;
     letter-spacing: 0.4px;
   }
 
   &__stop-name {
     font-size: 13px;
     font-weight: 700;
-    color: $kb-text;
+    color: #0f172a;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -322,46 +252,13 @@
     padding: 0 4px;
   }
 
-  /* QR Code Box */
-  &__qr-box {
+  /* Active Card Bottom Ribbon */
+  &__active-ribbon {
     display: flex;
     align-items: center;
-    gap: 16px;
-    background-color: #fdfdfd;
-    border: 1px dashed $kb-line;
-    border-radius: 12px;
-    padding: 14px;
-  }
-
-  &__qr-graphic {
-    width: 90px;
-    height: 90px;
-    background-color: #f1f5f9;
-    border-radius: 8px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: $kb-ink;
-    flex-shrink: 0;
-    gap: 4px;
-    border: 1px solid #e2e8f0;
-  }
-
-  &__qr-payload {
-    font-size: 9px;
-    font-weight: 700;
-    color: $kb-text-muted;
-    font-family: monospace;
-    letter-spacing: 0.5px;
-  }
-
-  &__qr-details {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    flex: 1;
-    min-width: 0;
+    justify-content: space-between;
+    padding-top: 6px;
+    border-top: 1px dashed #e2e8f0;
   }
 
   &__valid-box {
@@ -370,43 +267,44 @@
   }
 
   &__valid-label {
-    font-size: 11px;
-    font-weight: 600;
-    color: $kb-late;
+    font-size: 10px;
+    font-weight: 700;
+    color: #e11d48;
     text-transform: uppercase;
-    letter-spacing: 0.3px;
+    letter-spacing: 0.4px;
   }
 
   &__valid-time {
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 800;
-    color: $kb-text;
+    color: #0f172a;
   }
 
-  &__qr-hint {
-    font-size: 11px;
-    color: $kb-text-muted;
-    margin: 0;
-    line-height: 1.3;
-  }
-
-  &__ticket-tags {
+  &__open-pass-btn {
     display: flex;
-    gap: 6px;
-    margin-top: 2px;
-    flex-wrap: wrap;
-  }
-
-  &__tag {
-    font-size: 10px;
+    align-items: center;
+    gap: 4px;
+    font-size: 13px;
     font-weight: 700;
-    background-color: #f1f5f9;
-    color: $kb-text-muted;
-    padding: 2px 6px;
-    border-radius: 4px;
+    color: #0284c7;
+    background-color: #f0f9ff;
+    padding: 6px 12px;
+    border-radius: 8px;
+    border: 1px solid #bae6fd;
+    transition: background-color 0.15s ease, color 0.15s ease;
+
+    i {
+      font-size: 14px;
+    }
   }
 
-  /* Past Tickets */
+  &__active-card:hover &__open-pass-btn {
+    background-color: #0284c7;
+    color: #ffffff;
+    border-color: #0284c7;
+  }
+
+  /* Past Tickets List */
   &__past-section {
     display: flex;
     flex-direction: column;
@@ -423,14 +321,26 @@
   }
 
   &__past-item {
-    background-color: $kb-surface;
-    border: 1px solid $kb-line;
-    border-radius: 10px;
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
     padding: 12px 14px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 12px;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      border-color: #cbd5e1;
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
   }
 
   &__past-main {
@@ -449,23 +359,24 @@
 
   &__past-route {
     font-size: 11px;
-    font-weight: 700;
+    font-weight: 800;
     background-color: #f1f5f9;
-    color: $kb-muted;
+    color: #0f172a;
     padding: 2px 6px;
     border-radius: 4px;
   }
 
   &__past-number {
     font-size: 11px;
-    color: $kb-muted;
+    color: #94a3b8;
     font-family: monospace;
+    font-weight: 600;
   }
 
   &__past-route-stops {
     font-size: 13px;
-    font-weight: 600;
-    color: $kb-muted; // Muted text for past destinations per design notes
+    font-weight: 700;
+    color: #334155;
     display: flex;
     align-items: center;
     gap: 6px;
@@ -486,34 +397,45 @@
 
   &__past-meta {
     font-size: 11px;
-    color: $kb-muted; // Muted dates per design notes
+    color: #94a3b8;
     display: flex;
     align-items: center;
     gap: 6px;
+    font-weight: 500;
   }
 
   &__past-end {
     display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 4px;
+    align-items: center;
+    gap: 12px;
     flex-shrink: 0;
   }
 
   &__past-fare {
     font-size: 14px;
-    font-weight: 700;
-    color: $kb-muted;
+    font-weight: 800;
+    color: #0f172a;
   }
 
   &__past-status {
     font-size: 10px;
-    font-weight: 600;
+    font-weight: 700;
     text-transform: uppercase;
     background-color: #f1f5f9;
-    color: $kb-muted;
+    color: #64748b;
     padding: 2px 6px;
     border-radius: 4px;
+  }
+
+  &__past-chevron {
+    color: #94a3b8;
+    font-size: 14px;
+    transition: transform 0.15s ease;
+  }
+
+  &__past-item:hover &__past-chevron {
+    transform: translateX(2px);
+    color: #0284c7;
   }
 
   /* Passes Tab */
@@ -524,8 +446,8 @@
   }
 
   &__pass-card {
-    background-color: $kb-surface;
-    border: 1px solid $kb-line;
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
     border-radius: 14px;
     position: relative;
     overflow: hidden;
@@ -534,23 +456,6 @@
     flex-direction: column;
     padding: 16px;
     gap: 14px;
-
-    &--expiring {
-      border-color: #fde68a;
-    }
-  }
-
-  &__pass-accent-bar {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background-color: $kb-primary;
-  }
-
-  &__pass-card--expiring &__pass-accent-bar {
-    background-color: $kb-accent;
   }
 
   &__pass-header {
@@ -559,44 +464,38 @@
     justify-content: space-between;
   }
 
-  &__pass-badges {
+  &__pass-corp-wrap {
     display: flex;
     align-items: center;
     gap: 8px;
   }
 
-  &__pass-corp {
-    background-color: $kb-badge-bg;
+  &__pass-corp-badge {
+    background-color: #0284c7;
     color: #ffffff;
-    font-size: 12px;
-    font-weight: 700;
+    font-size: 11px;
+    font-weight: 800;
     padding: 3px 8px;
-    border-radius: 4px;
+    border-radius: 6px;
   }
 
-  &__pass-type {
+  &__pass-type-title {
     font-size: 14px;
     font-weight: 700;
-    color: $kb-text;
+    color: #0f172a;
   }
 
   &__pass-status-pill {
     font-size: 11px;
     font-weight: 700;
     padding: 3px 8px;
-    border-radius: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.3px;
-
-    &--active {
-      background-color: #ecfdf5;
-      color: $kb-ontime;
-    }
+    border-radius: 6px;
+    background-color: #ecfdf5;
+    color: #059669;
 
     &--expiring {
-      background-color: #fffbeb;
-      color: #b45309;
-      border: 1px solid #fef3c7;
+      background-color: #fef3c7;
+      color: #d97706;
     }
   }
 
@@ -604,30 +503,6 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
-    background-color: #f8fafc;
-    border-radius: 8px;
-    padding: 10px 12px;
-  }
-
-  &__pass-number-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding-bottom: 6px;
-    border-bottom: 1px dashed $kb-line;
-  }
-
-  &__pass-num-label {
-    font-size: 11px;
-    color: $kb-text-muted;
-    font-weight: 500;
-  }
-
-  &__pass-number {
-    font-size: 12px;
-    font-weight: 700;
-    font-family: monospace;
-    color: $kb-text;
   }
 
   &__pass-row {
@@ -636,15 +511,39 @@
     justify-content: space-between;
   }
 
-  &__pass-row-label {
+  &__pass-label {
     font-size: 11px;
-    color: $kb-text-muted;
+    color: #94a3b8;
+    font-weight: 600;
+    text-transform: uppercase;
   }
 
-  &__pass-row-val {
+  &__pass-num-val {
+    font-size: 13px;
+    font-weight: 700;
+    font-family: monospace;
+    color: #0f172a;
+  }
+
+  &__pass-val {
+    font-size: 13px;
+    font-weight: 700;
+    color: #0f172a;
+  }
+
+  &__pass-dates-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding-top: 4px;
+  }
+
+  &__pass-date-val {
     font-size: 12px;
-    font-weight: 600;
-    color: $kb-text;
+    font-weight: 700;
+    color: #0f172a;
+    display: block;
+    margin-top: 2px;
   }
 
   /* Fare Saved Highlight */
@@ -662,7 +561,7 @@
     width: 32px;
     height: 32px;
     border-radius: 50%;
-    background-color: $kb-ontime;
+    background-color: #059669;
     color: #ffffff;
     display: flex;
     align-items: center;
@@ -677,7 +576,7 @@
 
   &__fare-saved-label {
     font-size: 11px;
-    font-weight: 600;
+    font-weight: 700;
     color: #065f46;
     text-transform: uppercase;
     letter-spacing: 0.4px;
@@ -690,157 +589,380 @@
   }
 }
 
-/* Sheets Styling */
-.tickets-sheet {
+/* ==========================================================================
+   BOARDING PASS MODAL (Pixel-Perfect to Reference Mockup)
+   ========================================================================== */
+.boarding-pass-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(15, 23, 42, 0.82);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 1300;
   display: flex;
-  flex-direction: column;
-  gap: 16px;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  box-sizing: border-box;
+  animation: bp-fade-in 0.22s ease-out;
+}
 
-  /* Sample Data Notice: $kb-accent background with $kb-ink text */
-  &__banner {
-    background-color: $kb-accent;
-    color: $kb-ink;
+.boarding-pass-card {
+  position: relative;
+  background-color: #ffffff;
+  width: 100%;
+  max-width: 345px;
+  border-radius: 28px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.45);
+  box-sizing: border-box;
+  overflow: hidden;
+  animation: bp-slide-up 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+
+  &__close-btn {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #f1f5f9;
+    border: none;
+    color: #64748b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-size: 13px;
+    cursor: pointer;
+    z-index: 10;
+    transition: background-color 0.15s ease, color 0.15s ease;
+
+    &:hover {
+      background-color: #e2e8f0;
+      color: #0f172a;
+    }
+  }
+
+  /* TOP SECTION */
+  &__top {
+    padding: 24px 22px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  /* FROM ○ ------------ 🚌 ------------ ● TO */
+  &__flight-track {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    gap: 8px;
+  }
+
+  &__track-endpoint {
+    font-size: 11px;
     font-weight: 700;
-    padding: 10px 14px;
-    border-radius: 8px;
+    color: #64748b;
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
+  }
+
+  &__track-middle {
+    flex: 1;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0 4px;
+  }
+
+  &__track-duration {
+    font-size: 10px;
+    font-weight: 700;
+    color: #475569;
+    margin-bottom: 2px;
+  }
+
+  &__track-pill {
+    background-color: #0f172a;
+    color: #ffffff;
+    font-size: 9px;
+    font-weight: 700;
+    padding: 1px 8px;
+    border-radius: 999px;
+    letter-spacing: 0.3px;
+    z-index: 2;
+    margin-bottom: 4px;
+  }
+
+  &__track-dash {
+    width: 100%;
+    border-top: 1px dashed #cbd5e1;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+  }
+
+  &__track-bus-icon {
+    position: relative;
+    z-index: 2;
+    background-color: #ffffff;
+    padding: 0 6px;
+    color: #0f172a;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* STATIONS & TIMES ROW */
+  &__stations-grid {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  &__station-col {
+    display: flex;
+    flex-direction: column;
+    max-width: 48%;
+
+    &--to {
+      text-align: right;
+      align-items: flex-end;
+    }
+  }
+
+  &__code {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 38px;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0;
+    line-height: 1;
+    letter-spacing: -0.03em;
+  }
+
+  &__stop-full {
+    font-size: 12px;
+    color: #64748b;
+    font-weight: 500;
+    margin: 4px 0 0;
+    line-height: 1.25;
+  }
+
+  &__time {
+    font-size: 16px;
+    font-weight: 800;
+    color: #0f172a;
+    margin-top: 12px;
+    line-height: 1;
+  }
+
+  &__date {
+    font-size: 11px;
+    color: #64748b;
+    font-weight: 600;
+    margin-top: 2px;
+  }
+
+  /* POWDER BLUE HIGHLIGHTED MIDDLE BAR */
+  &__mid-bar {
+    background-color: #99b8d8; // Muted powder blue matching the reference screenshot
+    background: linear-gradient(135deg, #a7c5e6 0%, #90b3db 100%);
+    border-radius: 14px;
+    padding: 10px 12px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 4px;
+    box-sizing: border-box;
+    width: 100%;
+  }
+
+  &__mid-col {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+  }
+
+  &__mid-label {
+    font-size: 9px;
+    font-weight: 600;
+    color: #1e3a5f;
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+
+  &__mid-val {
+    font-size: 13px;
+    font-weight: 800;
+    color: #0f172a;
+    margin-top: 2px;
+    line-height: 1.1;
+    white-space: nowrap;
+  }
+
+  /* PASSENGER & FARE DETAILS ROW */
+  &__passenger-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0 2px;
+  }
+
+  &__pass-col {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+
+    &:last-child {
+      text-align: right;
+    }
+  }
+
+  &__pass-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: #64748b;
+    text-transform: capitalize;
+  }
+
+  &__pass-val {
+    font-size: 13px;
+    font-weight: 800;
+    color: #0f172a;
+    margin-top: 2px;
+  }
+
+  /* ========================================================================
+     PERFORATION DIVIDER WITH NOTCHES (Matches Reference Cutouts)
+     ======================================================================== */
+  &__perforation {
+    position: relative;
+    width: 100%;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  &__perforated-line {
+    width: calc(100% - 44px);
+    border-top: 2px dashed #cbd5e1;
+  }
+
+  &__notch {
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background-color: rgba(15, 23, 42, 0.82); // Matches backdrop overlay to create seamless cutout effect
+    box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.15);
+
+    &--left {
+      left: -14px;
+    }
+
+    &--right {
+      right: -14px;
+    }
+  }
+
+  /* ========================================================================
+     BOTTOM STUB: QR CODE IN PLACE OF BARCODE (User Requirement)
+     ======================================================================== */
+  &__stub {
+    padding: 10px 22px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     text-align: center;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
-    letter-spacing: 0.2px;
   }
 
-  /* Intercity Form */
-  &__form {
+  &__qr-box {
+    width: 130px;
+    height: 130px;
+    padding: 6px;
+    background-color: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e2e8f0;
     display: flex;
-    flex-direction: column;
-    gap: 12px;
+    align-items: center;
+    justify-content: center;
   }
 
-  &__field {
+  &__qr-svg {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  &__stub-meta {
+    margin-top: 10px;
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: 4px;
   }
 
-  &__label {
-    font-size: 12px;
-    font-weight: 600;
-    color: $kb-text-muted;
-  }
-
-  &__input {
-    background-color: #f8fafc;
-    border: 1px solid $kb-line;
-    border-radius: 8px;
-    padding: 10px 12px;
-    font-size: 14px;
-    color: $kb-text;
-    font-weight: 500;
-    cursor: not-allowed;
-  }
-
-  &__btn {
-    margin-top: 6px;
-    background-color: $kb-primary;
-    color: #ffffff;
-    border: none;
-    border-radius: 8px;
-    padding: 12px;
-    font-size: 14px;
-    font-weight: 700;
-    opacity: 0.6;
-    cursor: not-allowed;
-  }
-
-  /* RuPay NCMC Card Graphic */
-  &__ncmc-card {
-    background: linear-gradient(135deg, #1e293b, #0f172a);
-    color: #ffffff;
-    border-radius: 14px;
-    padding: 18px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-  }
-
-  &__ncmc-top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  &__ncmc-chip {
-    width: 34px;
-    height: 24px;
-    background: linear-gradient(135deg, #fcd34d, #f59e0b);
-    border-radius: 4px;
-    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.2);
-  }
-
-  &__ncmc-brand {
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    color: #e2e8f0;
-  }
-
-  &__ncmc-number {
-    font-size: 16px;
-    letter-spacing: 3px;
+  &__stub-num {
     font-family: monospace;
-    color: #f8fafc;
-  }
-
-  &__ncmc-bottom {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-  }
-
-  &__ncmc-label {
-    display: block;
-    font-size: 10px;
-    color: #94a3b8;
-    text-transform: uppercase;
-  }
-
-  &__ncmc-val {
     font-size: 13px;
-    font-weight: 600;
-    color: #ffffff;
-  }
-
-  &__ncmc-status-badge {
-    background-color: rgba(34, 197, 94, 0.2);
-    color: #4ade80;
-    border: 1px solid rgba(74, 222, 128, 0.3);
-    font-size: 11px;
-    font-weight: 700;
-    padding: 3px 8px;
-    border-radius: 6px;
-    text-transform: uppercase;
-  }
-
-  &__balance-box {
-    background-color: #f8fafc;
-    border: 1px solid $kb-line;
-    border-radius: 10px;
-    padding: 12px 16px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  &__balance-label {
-    font-size: 13px;
-    color: $kb-text-muted;
-    font-weight: 600;
-  }
-
-  &__balance-amount {
-    font-size: 18px;
     font-weight: 800;
-    color: $kb-text;
+    letter-spacing: 2px;
+    color: #0f172a;
+  }
+
+  &__stub-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background-color: #ecfdf5;
+    color: #059669;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 8px;
+    border: 1px solid #a7f3d0;
+  }
+
+  &__stub-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background-color: #059669;
+  }
+
+  &__stub-hint {
+    font-size: 11px;
+    color: #64748b;
+    margin: 4px 0 0;
+    font-weight: 500;
+  }
+}
+
+@keyframes bp-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes bp-slide-up {
+  from {
+    transform: translateY(30px) scale(0.96);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
   }
 }
