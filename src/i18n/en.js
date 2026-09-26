@@ -273,5 +273,6 @@ export default {
   to_label: "To",
   clear_history: "Clear",
   Metro: "Metro",
-  metro: "Metro"
+  metro: "Metro",
+  search_metro_schedules: "Search Metro Schedules"
 };

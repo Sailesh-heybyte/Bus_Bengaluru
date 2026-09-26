@@ -273,5 +273,6 @@ export default {
   to_label: "ವರೆಗೆ",
   clear_history: "ತೆರವು",
   Metro: "ಮೆಟ್ರೋ",
-  metro: "ಮೆಟ್ರೋ"
+  metro: "ಮೆಟ್ರೋ",
+  search_metro_schedules: "ಮೆಟ್ರೋ ವೇಳಾಪಟ್ಟಿ ಹುಡುಕಿ"
 };

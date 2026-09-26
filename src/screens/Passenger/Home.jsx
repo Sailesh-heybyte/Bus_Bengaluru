@@ -381,18 +381,43 @@ export function Home() {
             className="home-modal-sheet"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="home-modal-sheet__handle" />
+            <div className="home-modal-sheet__top-bar">
+              <div className="home-modal-sheet__handle" />
+              <button
+                type="button"
+                className="home-modal-sheet__top-close"
+                onClick={() => setMrtModalOpen(false)}
+                aria-label={t('close') || 'Close'}
+              >
+                <i className="bi bi-x-lg" />
+              </button>
+            </div>
+
             <div className="home-modal-sheet__icon" aria-hidden="true">
               <i className="bi bi-train-front-fill" />
             </div>
+
             <h3 id="mrt-modal-title" className="home-modal-sheet__title">
               {t('mrt_notice_title')}
             </h3>
+
             <p className="home-modal-sheet__desc">{t('mrt_notice_desc')}</p>
+
             <div className="home-modal-sheet__actions">
               <button
                 type="button"
                 className="home-modal-sheet__primary-btn"
+                onClick={() => {
+                  setMrtModalOpen(false);
+                  navigate('/search?mode=mrt');
+                }}
+              >
+                {t('search_metro_schedules') || 'Search Metro Schedules'}
+              </button>
+
+              <button
+                type="button"
+                className="home-modal-sheet__secondary-btn"
                 onClick={() => {
                   setMrtModalOpen(false);
                   navigate('/tickets');
@@ -400,6 +425,7 @@ export function Home() {
               >
                 {t('view_ncmc')}
               </button>
+
               <button
                 type="button"
                 className="home-modal-sheet__close-btn"
