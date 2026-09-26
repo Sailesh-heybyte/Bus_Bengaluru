@@ -280,5 +280,12 @@ export default {
   live_gps: "ಲೈವ್ ಜಿಪಿಎಸ್",
   scheduled: "ನಿಗದಿತ",
   arriving_in: "ಆಗಮನ",
-  departs_at: "ಹೊರಡುವ ಸಮಯ"
+  departs_at: "ಹೊರಡುವ ಸಮಯ",
+  tap_to_view_qr: "ಡಿಜಿಟಲ್ ಪಾಸ್ ಮತ್ತು QR ಕೋಡ್ ವೀಕ್ಷಿಸಲು ಟ್ಯಾಪ್ ಮಾಡಿ",
+  digital_pass: "ಡಿಜಿಟಲ್ ಸಾರಿಗೆ ಪಾಸ್",
+  show_to_conductor: "ವಿನಂತಿಯ ಮೇರೆಗೆ ನಿರ್ವಾಹಕರಿಗೆ ಈ ಪಾಸ್ ಮತ್ತು QR ಕೋಡ್ ತೋರಿಸಿ",
+  scan_etm: "ನಿರ್ವಾಹಕರ ಕೈಯಲ್ಲಿರುವ ETM ಸಾಧನದಲ್ಲಿ ಸ್ಕ್ಯಾನ್ ಮಾಡಿ",
+  smart_card: "ಸ್ಮಾರ್ಟ್ ಸಾರಿಗೆ ಕಾರ್ಡ್",
+  expires_in: "ಅವಧಿ ಮುಕ್ತಾಯ",
+  allowed_route: "ಅನುಮತಿಸಲಾದ ಮಾರ್ಗ"
 };

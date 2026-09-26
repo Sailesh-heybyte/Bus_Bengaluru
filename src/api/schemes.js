@@ -7,7 +7,12 @@ export function toUiShaktiRecord(record) {
     beneficiaryName: record.beneficiary_name,
     beneficiaryId: record.beneficiary_id,
     issuedOn: record.issued_on,
+    validUntil: record.valid_until,
+    expiresIn: record.expires_in,
+    renewalType: record.renewal_type,
     validIn: record.valid_in,
+    corporations: record.corporations || ["BMTC", "KSRTC", "NWKRTC", "KKRTC"],
+    allowedServices: record.allowed_services,
     excludedServices: record.excluded_services,
     tripsThisMonth: record.trips_this_month,
     fareValueThisMonth: record.fare_value_this_month
@@ -23,9 +28,13 @@ export function toUiStudentPass(pass) {
     classOrCourse: pass.class_or_course,
     passNumber: pass.pass_number,
     corporation: pass.corporation,
+    corporations: pass.corporations || ["BMTC"],
     routeId: pass.route_id,
+    routeName: pass.route_name,
+    allowedServices: pass.allowed_services,
     validFrom: pass.valid_from,
     validTo: pass.valid_to,
+    expiresIn: pass.expires_in,
     status: pass.status,
     issuedDigitally: pass.issued_digitally
   };

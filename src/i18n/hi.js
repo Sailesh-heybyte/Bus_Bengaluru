@@ -73,5 +73,12 @@ export default {
   live_gps: "लाइव जीपीएस",
   scheduled: "निर्धारित",
   arriving_in: "पहुंच रही है",
-  departs_at: "रवानगी"
+  departs_at: "रवानगी",
+  tap_to_view_qr: "डिजिटल पास और क्यूआर कोड देखने के लिए टैप करें",
+  digital_pass: "डिजिटल ट्रांजिट पास",
+  show_to_conductor: "अनुरोध पर बस कंडक्टर को यह पास और क्यूआर कोड दिखाएं",
+  scan_etm: "कंडक्टर के हैंडहेल्ड ईटीएम डिवाइस पर स्कैन करें",
+  smart_card: "स्मार्ट ट्रांजिट कार्ड",
+  expires_in: "समाप्ति",
+  allowed_route: "अनुमत रूट"
 };

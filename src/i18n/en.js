@@ -280,5 +280,12 @@ export default {
   live_gps: "Live GPS",
   scheduled: "Scheduled",
   arriving_in: "Arriving in",
-  departs_at: "Departs"
+  departs_at: "Departs",
+  tap_to_view_qr: "Tap to View Digital Pass & QR Code",
+  digital_pass: "Digital Transit Pass",
+  show_to_conductor: "Show this pass & QR code to the conductor on request",
+  scan_etm: "Scan on Conductor's Handheld ETM Device",
+  smart_card: "Smart Transit Card",
+  expires_in: "Expires in",
+  allowed_route: "Permitted Route"
 };
