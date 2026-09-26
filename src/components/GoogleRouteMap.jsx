@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, useMemo, useCallback } from 'react';
 import { loadGoogleMaps } from '../utils/googleMapsLoader';
-import { getRouteRoadPath } from '../data/routeRoadShapes';
+import { getExactRoadGeometry } from '../utils/routeGeometry';
 import './GoogleRouteMap.scss';
 
 // Calculate bearing in degrees between two coordinates (0° = North, 90° = East)
@@ -78,14 +78,6 @@ export function GoogleRouteMap({
   const infoWindowRef = useRef(null);
 
   const [mapLoaded, setMapLoaded] = useState(false);
-  const [roadPathData, setRoadPathData] = useState(() =>
-    getRouteRoadPath(routeId, stops, 8)
-  );
-
-  // Keep roadPathData in sync when routeId or stops change
-  useEffect(() => {
-    setRoadPathData(getRouteRoadPath(routeId, stops, 8));
-  }, [routeId, stops]);
 
   // Valid stops with latitude & longitude
   const validStops = useMemo(() => {
@@ -97,6 +89,11 @@ export function GoogleRouteMap({
         !isNaN(s.longitude)
     );
   }, [stops]);
+
+  // 100% real asphalt road geometry for the current route
+  const roadPathData = useMemo(() => {
+    return getExactRoadGeometry(routeId, validStops);
+  }, [routeId, validStops]);
 
   // Initialize Map
   useEffect(() => {
@@ -140,66 +137,6 @@ export function GoogleRouteMap({
           mapInstanceRef.current = map;
           infoWindowRef.current = new googleMaps.InfoWindow();
           setMapLoaded(true);
-
-          // Try Google DirectionsService for live road overview if available
-          if (validStops.length >= 2) {
-            try {
-              const directionsService = new googleMaps.DirectionsService();
-              const origin = { lat: validStops[0].latitude, lng: validStops[0].longitude };
-              const destination = {
-                lat: validStops[validStops.length - 1].latitude,
-                lng: validStops[validStops.length - 1].longitude,
-              };
-              const waypoints = validStops.slice(1, -1).map((s) => ({
-                location: { lat: s.latitude, lng: s.longitude },
-                stopover: true,
-              }));
-
-              directionsService.route(
-                {
-                  origin,
-                  destination,
-                  waypoints,
-                  travelMode: googleMaps.TravelMode.DRIVING,
-                },
-                (result, status) => {
-                  if (
-                    isMounted &&
-                    status === googleMaps.DirectionsStatus.OK &&
-                    result?.routes?.[0]?.overview_path
-                  ) {
-                    const overviewPath = result.routes[0].overview_path.map((p) => ({
-                      lat: p.lat(),
-                      lng: p.lng(),
-                    }));
-
-                    // Map each stop to the closest point in the road overview
-                    const newStopIndices = {};
-                    validStops.forEach((stop, sIdx) => {
-                      let bestDist = Infinity;
-                      let bestIdx = 0;
-                      overviewPath.forEach((pt, pIdx) => {
-                        const d =
-                          Math.hypot(pt.lat - stop.latitude, pt.lng - stop.longitude);
-                        if (d < bestDist) {
-                          bestDist = d;
-                          bestIdx = pIdx;
-                        }
-                      });
-                      newStopIndices[sIdx] = bestIdx;
-                    });
-
-                    setRoadPathData({
-                      densePath: overviewPath,
-                      stopIndexToRoadIndex: newStopIndices,
-                    });
-                  }
-                }
-              );
-            } catch (dirErr) {
-              console.warn('DirectionsService request skipped, using built-in road geometry:', dirErr);
-            }
-          }
         }
       })
       .catch((err) => {
