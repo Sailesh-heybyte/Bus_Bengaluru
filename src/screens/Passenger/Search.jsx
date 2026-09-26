@@ -1,9 +1,95 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext';
+import { useSimulation } from '../../context/SimulationContext';
 import { searchPlaceToPlace } from '../../api/routes';
 import busAsset from '../../assets/bus-card.png';
 import './Search.scss';
+
+function formatTime12(date) {
+  let hours = date.getHours();
+  let minutes = date.getMinutes();
+  const ampm = hours >= 12 ? 'PM' : 'AM';
+  hours = hours % 12;
+  hours = hours ? hours : 12;
+  const minutesStr = minutes < 10 ? '0' + minutes : minutes;
+  return `${hours}:${minutesStr} ${ampm}`;
+}
+
+function formatTime24(date) {
+  const hours = date.getHours().toString().padStart(2, '0');
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+  return `${hours}:${minutes}`;
+}
+
+function buildAvailableBuses(routes, liveBuses) {
+  if (!routes || routes.length === 0) return [];
+  const now = Date.now();
+  const busesList = [];
+
+  routes.forEach((route) => {
+    // 1. Live buses for this route
+    const matchingLive = (liveBuses || []).filter((b) => {
+      const routeMatch = (b.routeId || b.route_id) === route.id;
+      const isRunning = (b.currentStatus || b.current_status) === 'running';
+      return routeMatch && isRunning;
+    });
+
+    matchingLive.forEach((bus, i) => {
+      const etaMins = Math.max(2, Math.round(((i + 1) * 5) + ((bus.progress || 0) % 1) * 3));
+      const depTime = new Date(now + etaMins * 60 * 1000);
+      const durationMins = route.distanceKm ? Math.round(route.distanceKm * 1.3) : 38;
+      const arrTime = new Date(depTime.getTime() + durationMins * 60 * 1000);
+
+      busesList.push({
+        id: bus.id,
+        routeId: route.id,
+        routeNumber: route.routeNumber || route.id,
+        corporation: bus.corporation || route.corporation || 'BMTC',
+        busType: bus.bus_type || 'Ordinary',
+        registrationNumber: bus.registration_number || `KA-01 F 901${i + 1}`,
+        isLive: true,
+        etaMinutes: etaMins,
+        timeFormatted: `${formatTime24(depTime)} ⟷ ${formatTime24(arrTime)}`,
+        departureTime: formatTime12(depTime),
+        departureTimestamp: depTime.getTime(),
+        fare: route.baseFare || 25,
+        from: route.from,
+        to: route.to,
+        statusText: `Live GPS • ${etaMins}m`
+      });
+    });
+
+    // 2. Upcoming scheduled buses
+    const intervals = [16, 28, 42, 56, 70, 88];
+    intervals.forEach((intervalMins, idx) => {
+      const depTime = new Date(now + intervalMins * 60 * 1000);
+      const durationMins = route.distanceKm ? Math.round(route.distanceKm * 1.3) : 38;
+      const arrTime = new Date(depTime.getTime() + durationMins * 60 * 1000);
+      const isAC = idx % 2 === 1;
+
+      busesList.push({
+        id: `sched_${route.id}_${idx}`,
+        routeId: route.id,
+        routeNumber: route.routeNumber || route.id,
+        corporation: route.corporation || 'BMTC',
+        busType: isAC ? 'Vajra (AC)' : 'Ordinary',
+        registrationNumber: isAC ? `KA-01 F 92${idx}` : `KA-01 F 91${idx}`,
+        isLive: false,
+        etaMinutes: intervalMins,
+        timeFormatted: `${formatTime24(depTime)} ⟷ ${formatTime24(arrTime)}`,
+        departureTime: formatTime12(depTime),
+        departureTimestamp: depTime.getTime(),
+        fare: isAC ? (route.baseFare ? route.baseFare + 10 : 35) : (route.baseFare || 25),
+        from: route.from,
+        to: route.to,
+        statusText: 'Scheduled'
+      });
+    });
+  });
+
+  return busesList.sort((a, b) => a.departureTimestamp - b.departureTimestamp);
+}
 
 const DEFAULT_BUS_SEARCHES = [
   {
@@ -45,6 +131,7 @@ export function Search() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { t, language } = useLanguage();
+  const { liveBuses } = useSimulation();
 
   const defaultFrom = 'Central Silk Board';
   const defaultTo = 'Hebbal';
@@ -83,6 +170,30 @@ export function Search() {
   const [hasSearched, setHasSearched] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
+  const [activeFilter, setActiveFilter] = useState('all'); // 'all' | 'live' | 'ac'
+
+  // Build dynamic time-sorted available buses
+  const availableBuses = useMemo(() => {
+    return buildAvailableBuses(searchResults, liveBuses);
+  }, [searchResults, liveBuses]);
+
+  // Filter available buses based on selected pill
+  const filteredBuses = useMemo(() => {
+    return availableBuses.filter((bus) => {
+      if (activeFilter === 'live') return bus.isLive;
+      if (activeFilter === 'ac') {
+        const type = bus.busType.toLowerCase();
+        return type.includes('ac') || type.includes('vajra') || type.includes('chigari');
+      }
+      return true;
+    });
+  }, [availableBuses, activeFilter]);
+
+  const liveCount = useMemo(() => availableBuses.filter((b) => b.isLive).length, [availableBuses]);
+  const acCount = useMemo(() => availableBuses.filter((b) => {
+    const type = b.busType.toLowerCase();
+    return type.includes('ac') || type.includes('vajra') || type.includes('chigari');
+  }).length, [availableBuses]);
 
   const handleSwap = () => {
     const temp = fromQuery;
@@ -137,6 +248,14 @@ export function Search() {
       });
   };
 
+  const handleBusClick = (bus) => {
+    if (bus.isLive) {
+      navigate(`/route/${bus.routeId}?busId=${bus.id}`);
+    } else {
+      navigate(`/route/${bus.routeId}`);
+    }
+  };
+
   const handleSelectRecent = (item) => {
     setFromQuery(item.from);
     setToQuery(item.to);
@@ -152,13 +271,13 @@ export function Search() {
       // ignore
     }
 
-    if (item.routeId) {
-      navigate(`/route/${item.routeId}`);
-    } else {
-      // Trigger search
-      setHasSearched(true);
-      searchPlaceToPlace(item.from, item.to).then((res) => setSearchResults(res || []));
-    }
+    // Trigger search
+    setHasSearched(true);
+    setIsSearching(true);
+    searchPlaceToPlace(item.from, item.to).then((res) => {
+      setSearchResults(res || []);
+      setIsSearching(false);
+    });
   };
 
   const handleClearRecent = () => {
@@ -284,7 +403,7 @@ export function Search() {
           <div className="search-page__results-section">
             <div className="search-page__section-header">
               <h2 className="search-page__section-title">
-                {t('available_buses') || 'Available Bus Routes'} ({searchResults.length})
+                {t('available_buses') || 'Available Buses'} ({filteredBuses.length})
               </h2>
               <button
                 type="button"
@@ -295,48 +414,121 @@ export function Search() {
               </button>
             </div>
 
+            {/* Filter Pills Bar */}
+            <div className="search-filter-bar" role="tablist" aria-label="Bus filters">
+              <button
+                type="button"
+                className={`search-filter-pill ${activeFilter === 'all' ? 'search-filter-pill--active' : ''}`}
+                onClick={() => setActiveFilter('all')}
+              >
+                <span>{t('all_buses') || 'All Buses'}</span>
+                <span className="search-filter-pill__count">{availableBuses.length}</span>
+              </button>
+
+              <button
+                type="button"
+                className={`search-filter-pill ${activeFilter === 'live' ? 'search-filter-pill--active' : ''}`}
+                onClick={() => setActiveFilter('live')}
+              >
+                <span className="search-filter-pill__live-dot" />
+                <span>{t('live_only') || 'Live GPS'}</span>
+                <span className="search-filter-pill__count">{liveCount}</span>
+              </button>
+
+              <button
+                type="button"
+                className={`search-filter-pill ${activeFilter === 'ac' ? 'search-filter-pill--active' : ''}`}
+                onClick={() => setActiveFilter('ac')}
+              >
+                <span>{t('ac_buses') || 'AC Vajra'}</span>
+                <span className="search-filter-pill__count">{acCount}</span>
+              </button>
+            </div>
+
             {isSearching ? (
               <div className="search-page__loading">
                 <div className="search-page__spinner" />
                 <span>Searching active routes...</span>
               </div>
-            ) : searchResults.length > 0 ? (
-              <ul className="search-schedule-list" role="list">
-                {searchResults.map((route) => (
+            ) : filteredBuses.length > 0 ? (
+              <ul className="search-bus-list" role="list">
+                {filteredBuses.map((bus) => (
                   <li
-                    key={route.id}
-                    className="search-schedule-item"
-                    onClick={() => navigate(`/route/${route.id}`)}
+                    key={bus.id}
+                    className={`search-bus-card ${bus.isLive ? 'search-bus-card--live' : ''}`}
+                    onClick={() => handleBusClick(bus)}
                     role="button"
                     tabIndex={0}
                     onKeyDown={(e) => {
                       if (e.key === 'Enter' || e.key === ' ') {
-                        navigate(`/route/${route.id}`);
+                        handleBusClick(bus);
                       }
                     }}
                   >
-                    <div className="search-schedule-item__left">
-                      <div className="search-schedule-item__time-row">
-                        <span className="search-schedule-item__route-badge">
-                          {route.routeNumber || route.id}
+                    {/* Top Row: Time Range & Live Status */}
+                    <div className="search-bus-card__top">
+                      <div className="search-bus-card__time-badge">
+                        <i className="bi bi-clock" />
+                        <span>{bus.timeFormatted}</span>
+                      </div>
+
+                      {bus.isLive ? (
+                        <span className="search-bus-card__status-pill search-bus-card__status-pill--live">
+                          <span className="search-bus-card__pulse-dot" />
+                          <span>{t('live_gps') || 'Live GPS'} • {bus.etaMinutes}m away</span>
                         </span>
-                        <span className="search-schedule-item__time">
-                          {route.headway || '10:00 ⟷ 10:30'}
+                      ) : (
+                        <span className="search-bus-card__status-pill search-bus-card__status-pill--sched">
+                          <i className="bi bi-calendar3" />
+                          <span>{t('scheduled') || 'Scheduled'}</span>
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Middle Row: Route Badge, Bus Type & Corridor */}
+                    <div className="search-bus-card__middle">
+                      <div className="search-bus-card__badge-col">
+                        <span className="search-bus-card__route-badge">
+                          {bus.routeNumber}
+                        </span>
+                        <span className="search-bus-card__corp-tag">
+                          {bus.corporation}
                         </span>
                       </div>
-                      <div className="search-schedule-item__station-row">
-                        <i className="bi bi-geo-alt search-schedule-item__icon" />
-                        <span className="search-schedule-item__station">
-                          {route.from} ⟷ {route.to}
-                        </span>
+
+                      <div className="search-bus-card__meta">
+                        <div className="search-bus-card__name-row">
+                          <span className="search-bus-card__bus-type">{bus.busType}</span>
+                          <span className="search-bus-card__bus-reg">• {bus.registrationNumber}</span>
+                        </div>
+                        <div className="search-bus-card__corridor">
+                          <i className="bi bi-geo-alt-fill search-bus-card__corridor-icon" />
+                          <span className="search-bus-card__corridor-text">
+                            {bus.from} ➔ {bus.to}
+                          </span>
+                        </div>
                       </div>
                     </div>
 
-                    <div className="search-schedule-item__right">
-                      <span className="search-schedule-item__fare">
-                        ₹ {route.baseFare || 25}
-                      </span>
-                      <i className="bi bi-chevron-right search-schedule-item__chevron" aria-hidden="true" />
+                    {/* Bottom Row: Fare & Track on Map Button */}
+                    <div className="search-bus-card__bottom">
+                      <div className="search-bus-card__fare-block">
+                        <span className="search-bus-card__fare-label">{t('fare') || 'Fare'}</span>
+                        <span className="search-bus-card__fare-val">₹ {bus.fare}</span>
+                      </div>
+
+                      <button
+                        type="button"
+                        className="search-bus-card__track-btn"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleBusClick(bus);
+                        }}
+                      >
+                        <i className="bi bi-map-fill" />
+                        <span>{t('track_on_map') || 'Track on Map'}</span>
+                        <i className="bi bi-chevron-right search-bus-card__track-arrow" />
+                      </button>
                     </div>
                   </li>
                 ))}
@@ -345,10 +537,10 @@ export function Search() {
               <div className="search-page__empty-search">
                 <i className="bi bi-bus-front search-page__empty-icon" />
                 <p className="search-page__empty-title">
-                  {t('no_buses_found') || 'No direct buses found between these stops'}
+                  {t('no_buses_found') || 'No buses found for this filter'}
                 </p>
                 <p className="search-page__empty-sub">
-                  Try checking popular stops like Central Silk Board, Hebbal, KBS Majestic, or Whitefield TTMC.
+                  Try switching filters or check major transit stops like Central Silk Board, Hebbal, or Majestic.
                 </p>
               </div>
             )}

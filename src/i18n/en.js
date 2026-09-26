@@ -271,6 +271,14 @@ export default {
   to_label: "To",
   clear_history: "Clear",
   search_buses: "Search Buses",
-  available_buses: "Available Bus Routes",
-  no_buses_found: "No buses found for this route"
+  available_buses: "Available Buses",
+  no_buses_found: "No buses found for this route",
+  all_buses: "All Buses",
+  live_only: "Live GPS",
+  ac_buses: "AC Vajra",
+  track_on_map: "Track on Map",
+  live_gps: "Live GPS",
+  scheduled: "Scheduled",
+  arriving_in: "Arriving in",
+  departs_at: "Departs"
 };

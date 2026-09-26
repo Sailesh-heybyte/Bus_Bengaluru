@@ -271,6 +271,14 @@ export default {
   to_label: "ವರೆಗೆ",
   clear_history: "ತೆರವು",
   search_buses: "ಬಸ್ ಹುಡುಕಿ",
-  available_buses: "ಲಭ್ಯವಿರುವ ಬಸ್ ಮಾರ್ಗಗಳು",
-  no_buses_found: "ಈ ಮಾರ್ಗದಲ್ಲಿ ಯಾವುದೇ ಬಸ್ ಕಂಡುಬಂದಿಲ್ಲ"
+  available_buses: "ಲಭ್ಯವಿರುವ ಬಸ್‌ಗಳು",
+  no_buses_found: "ಈ ಮಾರ್ಗದಲ್ಲಿ ಯಾವುದೇ ಬಸ್ ಕಂಡುಬಂದಿಲ್ಲ",
+  all_buses: "ಎಲ್ಲಾ ಬಸ್‌ಗಳು",
+  live_only: "ಲೈವ್ ಜಿಪಿಎಸ್",
+  ac_buses: "ಎಸಿ ವಜ್ರ",
+  track_on_map: "ಮ್ಯಾಪ್‌ನಲ್ಲಿ ಟ್ರ್ಯಾಕ್ ಮಾಡಿ",
+  live_gps: "ಲೈವ್ ಜಿಪಿಎಸ್",
+  scheduled: "ನಿಗದಿತ",
+  arriving_in: "ಆಗಮನ",
+  departs_at: "ಹೊರಡುವ ಸಮಯ"
 };

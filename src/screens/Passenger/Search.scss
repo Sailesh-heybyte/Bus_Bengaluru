@@ -2,7 +2,7 @@
 
 .search-page {
   min-height: 100dvh;
-  background-color: #ffffff;
+  background-color: #f4f7fb;
   color: #0f172a;
   font-family: 'Plus Jakarta Sans', 'Inter', 'Noto Sans Kannada', sans-serif;
   box-sizing: border-box;
@@ -306,6 +306,332 @@
 
   &:hover {
     color: #ef4444;
+  }
+}
+
+/* Filter Pills Bar */
+.search-filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.search-filter-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background-color: #ffffff;
+  color: #64748b;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.16s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+
+  &:hover {
+    border-color: #cbd5e1;
+    color: #0f172a;
+    background-color: #f8fafc;
+  }
+
+  &--active {
+    background: #0284c7;
+    background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+    color: #ffffff;
+    border-color: #0284c7;
+    box-shadow: 0 3px 10px rgba(2, 132, 199, 0.32);
+
+    &:hover {
+      background: linear-gradient(135deg, #0369a1 0%, #075985 100%);
+      color: #ffffff;
+    }
+
+    .search-filter-pill__count {
+      background: rgba(255, 255, 255, 0.25);
+      color: #ffffff;
+    }
+  }
+
+  &__live-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background-color: #10b981;
+    box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.35);
+  }
+
+  &__count {
+    font-size: 11px;
+    padding: 1px 6px;
+    border-radius: 10px;
+    background-color: #f1f5f9;
+    color: #64748b;
+    font-weight: 800;
+  }
+}
+
+/* Time-Sorted Available Buses List */
+.search-bus-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.search-bus-card {
+  background-color: #ffffff;
+  border-radius: 18px;
+  padding: 15px 16px 13px;
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  box-shadow: 0 3px 14px rgba(15, 23, 42, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  outline: none;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(2, 132, 199, 0.12);
+    border-color: #bae6fd;
+
+    .search-bus-card__track-btn {
+      background-color: #0284c7;
+      color: #ffffff;
+      box-shadow: 0 3px 10px rgba(2, 132, 199, 0.35);
+    }
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  &--live {
+    border-color: rgba(2, 132, 199, 0.35);
+  }
+
+  /* Top Row */
+  &__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__time-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 800;
+    color: #0f172a;
+    letter-spacing: -0.01em;
+
+    i {
+      color: #64748b;
+      font-size: 13px;
+    }
+  }
+
+  &__status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 9px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.1px;
+
+    &--live {
+      background-color: #ecfdf5;
+      color: #059669;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    &--sched {
+      background-color: #f1f5f9;
+      color: #64748b;
+      border: 1px solid #e2e8f0;
+
+      i {
+        font-size: 10px;
+      }
+    }
+  }
+
+  &__pulse-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background-color: #10b981;
+    box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.4);
+    animation: live-dot-pulse 1.5s infinite;
+  }
+
+  /* Middle Row */
+  &__middle {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  &__badge-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    flex-shrink: 0;
+  }
+
+  &__route-badge {
+    background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+    color: #ffffff;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 800;
+    font-size: 13px;
+    padding: 4px 8px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(2, 132, 199, 0.28);
+    letter-spacing: 0.3px;
+  }
+
+  &__corp-tag {
+    font-size: 9px;
+    font-weight: 800;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  &__meta {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  &__name-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  &__bus-type {
+    font-size: 13px;
+    font-weight: 700;
+    color: #0f172a;
+  }
+
+  &__bus-reg {
+    font-size: 11px;
+    font-weight: 600;
+    color: #64748b;
+  }
+
+  &__corridor {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #475569;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__corridor-icon {
+    color: #0284c7;
+    font-size: 11px;
+    flex-shrink: 0;
+  }
+
+  &__corridor-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* Bottom Row */
+  &__bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 10px;
+    border-top: 1px dashed #e2e8f0;
+  }
+
+  &__fare-block {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+  }
+
+  &__fare-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+
+  &__fare-val {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 800;
+    color: #0f172a;
+  }
+
+  &__track-btn {
+    background-color: #f0f9ff;
+    color: #0284c7;
+    border: 1px solid #bae6fd;
+    border-radius: 12px;
+    padding: 6px 12px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: all 0.16s ease;
+
+    i {
+      font-size: 11px;
+    }
+
+    &:hover {
+      background-color: #0284c7;
+      color: #ffffff;
+      border-color: #0284c7;
+      box-shadow: 0 3px 10px rgba(2, 132, 199, 0.3);
+    }
+  }
+
+  &__track-arrow {
+    font-size: 11px;
+    margin-left: -2px;
   }
 }
 

@@ -64,6 +64,14 @@ export default {
   alerts_sub: "लाइव देरी और सेवा अपडेट",
   complaints_sub: "शिकायत निवारण और सहायता",
   search_buses: "बस खोजें",
-  available_buses: "उपलब्ध बस रूट",
-  no_buses_found: "इस रूट के लिए कोई बस नहीं मिली"
+  available_buses: "उपलब्ध बसें",
+  no_buses_found: "इस रूट के लिए कोई बस नहीं मिली",
+  all_buses: "सभी बसें",
+  live_only: "लाइव जीपीएस",
+  ac_buses: "एसी वज्र",
+  track_on_map: "मैप पर ट्रैक करें",
+  live_gps: "लाइव जीपीएस",
+  scheduled: "निर्धारित",
+  arriving_in: "पहुंच रही है",
+  departs_at: "रवानगी"
 };

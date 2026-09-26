@@ -32,6 +32,7 @@ export function MapboxRouteMap({
   routeId,
   stops = [],
   liveBuses = [],
+  focusBusId = null,
   onBack,
   onRecenter,
 }) {
@@ -39,6 +40,7 @@ export function MapboxRouteMap({
   const mapInstanceRef = useRef(null);
   const startMarkerRef = useRef(null);
   const busMarkersRef = useRef(new Map());
+  const initialFlyDoneRef = useRef(false);
 
   const [activeStyle, setActiveStyle] = useState('navigation');
   const [showStyleMenu, setShowStyleMenu] = useState(false);
@@ -352,11 +354,12 @@ export function MapboxRouteMap({
           )
         : 0;
 
+      const isFocused = bus.id === focusBusId;
       let marker = currentMarkers.get(bus.id);
 
       if (!marker) {
         const busEl = document.createElement('div');
-        busEl.className = 'mapbox-route-map__bus-marker';
+        busEl.className = `mapbox-route-map__bus-marker ${isFocused ? 'mapbox-route-map__bus-marker--focused' : ''}`;
         busEl.innerHTML = `
           <div class="mapbox-route-map__bus-circle">
             <i class="bi bi-bus-front-fill"></i>
@@ -378,6 +381,24 @@ export function MapboxRouteMap({
       } else {
         marker.setLngLat([currentCoord.lng, currentCoord.lat]);
         marker.setRotation(heading);
+        const el = marker.getElement();
+        if (isFocused && !el.classList.contains('mapbox-route-map__bus-marker--focused')) {
+          el.classList.add('mapbox-route-map__bus-marker--focused');
+        } else if (!isFocused && el.classList.contains('mapbox-route-map__bus-marker--focused')) {
+          el.classList.remove('mapbox-route-map__bus-marker--focused');
+        }
+      }
+
+      // Fly to focused bus on initial load
+      if (isFocused && !initialFlyDoneRef.current) {
+        map.flyTo({
+          center: [currentCoord.lng, currentCoord.lat],
+          zoom: 15.6,
+          pitch: 30,
+          duration: 1000,
+          essential: true,
+        });
+        initialFlyDoneRef.current = true;
       }
     });
 
@@ -387,7 +408,7 @@ export function MapboxRouteMap({
         currentMarkers.delete(id);
       }
     }
-  }, [mapLoaded, validStops, liveBuses, roadPathData]);
+  }, [mapLoaded, validStops, liveBuses, roadPathData, focusBusId]);
 
   // Recenter to track the primary bus smoothly on the road
   const handleRecenterBus = useCallback(() => {
@@ -397,14 +418,14 @@ export function MapboxRouteMap({
       return;
     }
 
-    const primaryBus = liveBuses[0];
-    const marker = busMarkersRef.current.get(primaryBus.id);
+    const targetBus = (focusBusId && liveBuses.find((b) => b.id === focusBusId)) || liveBuses[0];
+    const marker = busMarkersRef.current.get(targetBus.id);
     if (marker) {
       const lngLat = marker.getLngLat();
       map.flyTo({
         center: lngLat,
-        zoom: 15.5,
-        pitch: 25,
+        zoom: 15.6,
+        pitch: 28,
         duration: 900,
         essential: true,
       });
@@ -413,7 +434,9 @@ export function MapboxRouteMap({
     }
 
     if (onRecenter) onRecenter();
-  }, [liveBuses, fitRouteBounds, onRecenter]);
+  }, [liveBuses, focusBusId, fitRouteBounds, onRecenter]);
+
+  const focusedBus = (liveBuses || []).find((b) => b.id === focusBusId);
 
   return (
     <div className="mapbox-route-map">
@@ -428,6 +451,29 @@ export function MapboxRouteMap({
       >
         <i className="bi bi-arrow-left" />
       </button>
+
+      {/* Focused Bus Top Pill Banner */}
+      {focusBusId && focusedBus && (
+        <div className="mapbox-route-map__focus-pill" role="status">
+          <span className="mapbox-route-map__focus-dot" />
+          <div className="mapbox-route-map__focus-meta">
+            <span className="mapbox-route-map__focus-title">
+              {focusedBus.registration_number || focusedBus.id}
+            </span>
+            <span className="mapbox-route-map__focus-sub">
+              {focusedBus.bus_type || 'Live'} • On Map
+            </span>
+          </div>
+          <button
+            type="button"
+            className="mapbox-route-map__focus-expand-btn"
+            onClick={fitRouteBounds}
+            title="Overview Full Route"
+          >
+            <i className="bi bi-aspect-ratio" />
+          </button>
+        </div>
+      )}
 
       {/* Floating Style Switcher (Top Right) */}
       <div className="mapbox-route-map__style-picker">

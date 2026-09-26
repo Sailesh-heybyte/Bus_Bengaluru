@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { getRouteDetail } from '../../api/routes';
 import { checkSavedStatus, toggleSavedRoute } from '../../api/user';
 import { useDebouncedLoading } from '../../hooks/useDebouncedLoading';
@@ -14,6 +14,9 @@ import './RouteDetail.scss';
 export function RouteDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const targetBusId = searchParams.get('busId');
+
   const { t } = useLanguage();
   const { liveBuses } = useSimulation();
   const { isOnline } = useNetwork();
@@ -49,8 +52,11 @@ export function RouteDetail() {
     return routeMatch && isRunning;
   });
 
-  // Track the primary active bus for synchronized live tracking
-  const trackedBuses = activeBuses.length > 0 ? [activeBuses[0]] : [];
+  // Track the primary active bus (prioritizing targetBusId if selected)
+  const selectedBus = targetBusId ? activeBuses.find((b) => b.id === targetBusId) : null;
+  const trackedBuses = selectedBus
+    ? [selectedBus, ...activeBuses.filter((b) => b.id !== targetBusId)]
+    : (activeBuses.length > 0 ? [activeBuses[0]] : []);
 
   const handleStopClick = (stopId) => {
     navigate(`/stop/${stopId}`);
@@ -77,6 +83,7 @@ export function RouteDetail() {
               routeId={id}
               stops={routeDetail.stops}
               liveBuses={trackedBuses}
+              focusBusId={targetBusId}
               onBack={() => navigate(-1)}
             />
 
