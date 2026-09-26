@@ -114,23 +114,13 @@ export function Home() {
             >
               <div className="home-transport-card__info">
                 <h3 className="home-transport-card__name">{t('bus')}</h3>
-                <button
-                  type="button"
-                  className="home-transport-card__btn home-transport-card__btn--bus"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    navigate('/search');
-                  }}
-                >
-                  {t('select')}
-                </button>
               </div>
 
               <div className="home-transport-card__graphic" aria-hidden="true">
                 <img
                   src={busAsset}
                   alt={t('bus')}
-                  className="home__transport-img"
+                  className="home__transport-img home__transport-img--bus"
                 />
               </div>
             </div>
@@ -149,23 +139,13 @@ export function Home() {
                 <h3 className="home-transport-card__name home-transport-card__name--mrt">
                   {t('mrt')}
                 </h3>
-                <button
-                  type="button"
-                  className="home-transport-card__btn home-transport-card__btn--mrt"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setMrtModalOpen(true);
-                  }}
-                >
-                  {t('select')}
-                </button>
               </div>
 
               <div className="home-transport-card__graphic" aria-hidden="true">
                 <img
                   src={mrtAsset}
                   alt={t('mrt')}
-                  className="home__transport-img"
+                  className="home__transport-img home__transport-img--mrt"
                 />
               </div>
             </div>

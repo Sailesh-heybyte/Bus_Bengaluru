@@ -193,9 +193,9 @@
 
 /* Transport Cards */
 .home-transport-card {
-  height: 110px;
-  border-radius: 16px;
-  padding: 16px;
+  height: 130px;
+  border-radius: 18px;
+  padding: 16px 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -212,13 +212,17 @@
     outline: none;
   }
 
+  &:active {
+    transform: scale(0.985);
+  }
+
   &--bus {
     background-color: #38bdf8;
     background: linear-gradient(135deg, #7dd3fc 0%, #38bdf8 100%);
     box-shadow: 0 6px 18px rgba(56, 189, 248, 0.25);
 
     &:hover {
-      box-shadow: 0 8px 22px rgba(56, 189, 248, 0.35);
+      box-shadow: 0 8px 24px rgba(56, 189, 248, 0.35);
     }
   }
 
@@ -228,21 +232,19 @@
     box-shadow: 0 6px 18px rgba(2, 132, 199, 0.25);
 
     &:hover {
-      box-shadow: 0 8px 22px rgba(2, 132, 199, 0.35);
+      box-shadow: 0 8px 24px rgba(2, 132, 199, 0.35);
     }
   }
 
   &__info {
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
+    align-items: center;
     z-index: 2;
   }
 
   &__name {
     font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 22px;
+    font-size: 24px;
     font-weight: 800;
     color: #ffffff;
     letter-spacing: -0.02em;
@@ -254,33 +256,10 @@
     }
   }
 
-  &__btn {
-    background-color: #ffffff;
-    color: #0284c7;
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: -0.01em;
-    border-radius: 999px;
-    padding: 6px 18px;
-    border: none;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-    cursor: pointer;
-    transition: transform 0.12s ease, background-color 0.12s ease;
-
-    &:hover {
-      background-color: #f8fafc;
-      transform: scale(1.04);
-    }
-
-    &:active {
-      transform: scale(0.96);
-    }
-  }
-
   &__graphic {
-    width: 140px;
-    height: 80px;
+    flex: 1;
+    max-width: 220px;
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: flex-end;
@@ -295,15 +274,25 @@
 }
 
 .home__transport-img {
-  height: 80px;
-  max-width: 140px;
   width: auto;
   object-fit: contain;
   background: transparent;
   vertical-align: middle;
-  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
   user-select: none;
   pointer-events: none;
+
+  &--bus {
+    height: 100px;
+    max-height: 102px;
+    max-width: 100%;
+  }
+
+  &--mrt {
+    height: 82px;
+    max-height: 85px;
+    max-width: 100%;
+  }
 }
 
 .home-transport-card:hover .home__transport-img {
