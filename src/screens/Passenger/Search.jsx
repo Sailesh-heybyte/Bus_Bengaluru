@@ -154,13 +154,6 @@ export function Search() {
           >
             <i className="bi bi-chevron-left" />
           </button>
-
-          {/* Clean Centered Title matching reference design */}
-          <h1 className="search-page__title">
-            {transportMode === 'bus' ? t('bus') : 'MRT'}
-          </h1>
-
-          <div className="search-page__nav-spacer" />
         </div>
 
         {/* Large Prominent Vehicle Illustration */}
