@@ -79,8 +79,9 @@
     transition: transform 0.25s ease;
 
     &--bus {
-      height: 66px;
-      margin-right: -10px;
+      height: 58px;
+      margin-right: -14px;
+      transform: scaleX(-1); /* Mirrors bus to face left towards the screen, matching the metro */
     }
 
     &--mrt {

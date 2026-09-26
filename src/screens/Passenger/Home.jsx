@@ -187,12 +187,12 @@ export function Home() {
         {/* Embedded Rounded Search Bar */}
         <div
           className="home-hero__search-bar"
-          onClick={() => navigate('/search')}
+          onClick={() => navigate('/search?mode=bus')}
           role="searchbox"
           tabIndex={0}
           onKeyDown={(e) => {
             if (e.key === 'Enter' || e.key === ' ') {
-              navigate('/search');
+              navigate('/search?mode=bus');
             }
           }}
           aria-label={t('search_placeholder')}
@@ -229,11 +229,11 @@ export function Home() {
             {/* Bus Transport Card */}
             <div
               className="home-transport-card home-transport-card--bus"
-              onClick={() => navigate('/search')}
+              onClick={() => navigate('/search?mode=bus')}
               role="button"
               tabIndex={0}
               onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') navigate('/search');
+                if (e.key === 'Enter' || e.key === ' ') navigate('/search?mode=bus');
               }}
             >
               <div className="home-transport-card__info">

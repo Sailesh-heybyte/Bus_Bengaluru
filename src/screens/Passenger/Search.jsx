@@ -1,16 +1,51 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext';
-import { searchRoutes, searchPlaceToPlace } from '../../api/routes';
-import { searchStops } from '../../api/stops';
+import { searchPlaceToPlace } from '../../api/routes';
 import { useDebounce } from '../../hooks/useDebounce';
 import mrtAsset from '../../assets/mrt-card.png';
 import busAsset from '../../assets/bus-card.png';
 import './Search.scss';
 
-const DEFAULT_RECENT_SEARCHES = [
+const DEFAULT_BUS_SEARCHES = [
   {
-    id: 'recent_1',
+    id: 'bus_recent_1',
+    mode: 'bus',
+    from: 'Central Silk Board',
+    to: 'Hebbal',
+    station: 'Central Silk Board ⟷ Hebbal (500D)',
+    stationKn: 'ಸೆಂಟ್ರಲ್ ಸಿಲ್ಕ್ ಬೋರ್ಡ್ ⟷ ಹೆಬ್ಬಾಳ (500D)',
+    time: '10:00 ⟷ 10:30',
+    fare: '25.0',
+    routeId: 'route_01'
+  },
+  {
+    id: 'bus_recent_2',
+    mode: 'bus',
+    from: 'Majestic (KBS)',
+    to: 'Whitefield TTMC',
+    station: 'Majestic ⟷ Whitefield (335E)',
+    stationKn: 'ಮೆಜೆಸ್ಟಿಕ್ ⟷ ವೈಟ್‌ಫೀಲ್ಡ್ (335E)',
+    time: '11:05 ⟷ 11:45',
+    fare: '35.0',
+    routeId: 'route_04'
+  },
+  {
+    id: 'bus_recent_3',
+    mode: 'bus',
+    from: 'Electronic City',
+    to: 'KBS Majestic',
+    station: 'Electronic City ⟷ Majestic',
+    stationKn: 'ಎಲೆಕ್ಟ್ರಾನಿಕ್ ಸಿಟಿ ⟷ ಮೆಜೆಸ್ಟಿಕ್',
+    time: '11:25 ⟷ 12:30',
+    fare: '30.0',
+    routeId: 'route_01'
+  }
+];
+
+const DEFAULT_MRT_SEARCHES = [
+  {
+    id: 'mrt_recent_1',
     mode: 'mrt',
     from: 'Lorem MRT Station',
     to: 'Dolor MRT Station',
@@ -21,7 +56,7 @@ const DEFAULT_RECENT_SEARCHES = [
     routeId: 'route_01'
   },
   {
-    id: 'recent_2',
+    id: 'mrt_recent_2',
     mode: 'mrt',
     from: 'Majestic Metro Station',
     to: 'Whitefield Kadugodi',
@@ -32,12 +67,12 @@ const DEFAULT_RECENT_SEARCHES = [
     routeId: 'route_04'
   },
   {
-    id: 'recent_3',
-    mode: 'bus',
-    from: 'Central Silk Board',
-    to: 'Hebbal',
-    station: 'Central Silk Board ⟷ Hebbal',
-    stationKn: 'ಸೆಂಟ್ರಲ್ ಸಿಲ್ಕ್ ಬೋರ್ಡ್ ⟷ ಹೆಬ್ಬಾಳ',
+    id: 'mrt_recent_3',
+    mode: 'mrt',
+    from: 'Baiyappanahalli',
+    to: 'MG Road',
+    station: 'Baiyappanahalli ⟷ MG Road',
+    stationKn: 'ಬೈಯಪ್ಪನಹಳ್ಳಿ ⟷ ಎಂ.ಜಿ. ರಸ್ತೆ',
     time: '11:25 ⟷ 12:30',
     fare: '3.0',
     routeId: 'route_01'
@@ -46,14 +81,29 @@ const DEFAULT_RECENT_SEARCHES = [
 
 export function Search() {
   const navigate = useNavigate();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const { t, language } = useLanguage();
 
-  const initialMode = searchParams.get('mode') === 'bus' ? 'bus' : 'mrt';
-  const [transportMode, setTransportMode] = useState(initialMode);
+  const modeParam = searchParams.get('mode') === 'mrt' ? 'mrt' : 'bus';
+  const [transportMode, setTransportMode] = useState(modeParam);
 
-  const [fromQuery, setFromQuery] = useState(searchParams.get('from') || 'Lorem MRT Station');
-  const [toQuery, setToQuery] = useState(searchParams.get('to') || 'Dolor MRT Station');
+  const defaultFrom = modeParam === 'mrt' ? 'Lorem MRT Station' : 'Central Silk Board';
+  const defaultTo = modeParam === 'mrt' ? 'Dolor MRT Station' : 'Hebbal';
+
+  const [fromQuery, setFromQuery] = useState(searchParams.get('from') || defaultFrom);
+  const [toQuery, setToQuery] = useState(searchParams.get('to') || defaultTo);
+
+  // Sync mode and default queries when URL mode changes
+  useEffect(() => {
+    const newMode = searchParams.get('mode') === 'mrt' ? 'mrt' : 'bus';
+    setTransportMode(newMode);
+    if (!searchParams.get('from')) {
+      setFromQuery(newMode === 'mrt' ? 'Lorem MRT Station' : 'Central Silk Board');
+    }
+    if (!searchParams.get('to')) {
+      setToQuery(newMode === 'mrt' ? 'Dolor MRT Station' : 'Hebbal');
+    }
+  }, [searchParams]);
 
   const debouncedFrom = useDebounce(fromQuery, 250);
   const debouncedTo = useDebounce(toQuery, 250);
@@ -65,31 +115,28 @@ export function Search() {
     } catch {
       // fallback
     }
-    return DEFAULT_RECENT_SEARCHES;
+    return modeParam === 'mrt' ? DEFAULT_MRT_SEARCHES : DEFAULT_BUS_SEARCHES;
   });
 
   const [searchResults, setSearchResults] = useState([]);
-  const [isSearching, setIsSearching] = useState(false);
 
   // Live search when user modifies from or to query
   useEffect(() => {
-    const isDefaultPair =
-      fromQuery === 'Lorem MRT Station' && toQuery === 'Dolor MRT Station';
+    const isDefault =
+      (fromQuery === 'Lorem MRT Station' && toQuery === 'Dolor MRT Station') ||
+      (fromQuery === 'Central Silk Board' && toQuery === 'Hebbal');
 
-    if (isDefaultPair || (!debouncedFrom.trim() && !debouncedTo.trim())) {
+    if (isDefault || (!debouncedFrom.trim() && !debouncedTo.trim())) {
       setSearchResults([]);
-      setIsSearching(false);
       return;
     }
 
-    setIsSearching(true);
     searchPlaceToPlace(debouncedFrom, debouncedTo)
       .then((res) => {
         setSearchResults(res || []);
-        setIsSearching(false);
       })
       .catch(() => {
-        setIsSearching(false);
+        setSearchResults([]);
       });
   }, [debouncedFrom, debouncedTo]);
 
@@ -99,23 +146,10 @@ export function Search() {
     setToQuery(temp);
   };
 
-  const handleModeChange = (mode) => {
-    setTransportMode(mode);
-    setSearchParams({ mode });
-    if (mode === 'bus' && fromQuery === 'Lorem MRT Station') {
-      setFromQuery('Central Silk Board');
-      setToQuery('Hebbal');
-    } else if (mode === 'mrt' && fromQuery === 'Central Silk Board') {
-      setFromQuery('Lorem MRT Station');
-      setToQuery('Dolor MRT Station');
-    }
-  };
-
   const handleSelectRecent = (item) => {
     setFromQuery(item.from);
     setToQuery(item.to);
 
-    // Save/update to top of recent searches
     const updated = [
       item,
       ...recentSearches.filter((r) => r.id !== item.id)
@@ -141,6 +175,13 @@ export function Search() {
     }
   };
 
+  const activeSearches =
+    recentSearches.length > 0
+      ? recentSearches
+      : transportMode === 'mrt'
+      ? DEFAULT_MRT_SEARCHES
+      : DEFAULT_BUS_SEARCHES;
+
   return (
     <div className="search-page">
       {/* 1. Sky Blue Hero Header */}
@@ -156,7 +197,7 @@ export function Search() {
           </button>
         </div>
 
-        {/* Large Prominent Vehicle Illustration */}
+        {/* Large Prominent Vehicle Illustration (Bus or Metro) */}
         <div className="search-page__vehicle-wrap" aria-hidden="true">
           <img
             src={transportMode === 'mrt' ? mrtAsset : busAsset}
@@ -282,10 +323,10 @@ export function Search() {
               </li>
             ))}
           </ul>
-        ) : recentSearches.length > 0 ? (
+        ) : activeSearches.length > 0 ? (
           /* Recent Searches List formatted identical to reference image */
           <ul className="search-schedule-list" role="list">
-            {recentSearches.map((item) => {
+            {activeSearches.map((item) => {
               const stationLabel =
                 language === 'kn' && item.stationKn ? item.stationKn : item.station;
 
@@ -306,7 +347,7 @@ export function Search() {
 
                   <div className="search-schedule-item__right">
                     <span className="search-schedule-item__fare">
-                      $ {item.fare}
+                      {transportMode === 'mrt' ? '$' : '₹'} {item.fare}
                     </span>
                     <button
                       type="button"
