@@ -419,7 +419,6 @@ export function Home() {
         notifications={notifications}
         onMarkAllAsRead={handleMarkAllAsRead}
         onItemClick={handleNoticeItemClick}
-        onSimulateNotice={handleSimulateNotice}
         language={language}
         t={t}
       />

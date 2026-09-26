@@ -110,51 +110,39 @@ export function NotificationPanel({
           </div>
         </div>
 
-        {/* Test Simulator Banner Button */}
-        {onSimulateNotice && (
-          <div className="notif-sheet__sim-row">
+        {/* Category Tabs - Clean Segmented Control */}
+        <div className="notif-tabs-wrap">
+          <nav className="notif-tabs" aria-label="Notification Categories">
             <button
               type="button"
-              className="notif-sheet__sim-btn"
-              onClick={onSimulateNotice}
+              className={`notif-tab ${activeTab === 'all' ? 'notif-tab--active' : ''}`}
+              onClick={() => setActiveTab('all')}
             >
-              <i className="bi bi-phone-vibrate" />
-              <span>{t ? t('simulate_notice') : 'Simulate Phone Notification'}</span>
+              {t ? t('all') : 'All'}
             </button>
-          </div>
-        )}
-
-        {/* Category Tabs */}
-        <nav className="notif-tabs" aria-label="Notification Categories">
-          <button
-            type="button"
-            className={`notif-tab ${activeTab === 'all' ? 'notif-tab--active' : ''}`}
-            onClick={() => setActiveTab('all')}
-          >
-            {t ? t('all') : 'All'}
-          </button>
-          <button
-            type="button"
-            className={`notif-tab ${activeTab === 'notices' ? 'notif-tab--active' : ''}`}
-            onClick={() => setActiveTab('notices')}
-          >
-            {t ? t('notices') : 'Notices'}
-          </button>
-          <button
-            type="button"
-            className={`notif-tab ${activeTab === 'circulars' ? 'notif-tab--active' : ''}`}
-            onClick={() => setActiveTab('circulars')}
-          >
-            {t ? t('circulars') : 'Circulars'}
-          </button>
-          <button
-            type="button"
-            className={`notif-tab ${activeTab === 'alerts' ? 'notif-tab--active' : ''}`}
-            onClick={() => setActiveTab('alerts')}
-          >
-            {t ? t('alerts') : 'Alerts'}
-          </button>
-        </nav>
+            <button
+              type="button"
+              className={`notif-tab ${activeTab === 'notices' ? 'notif-tab--active' : ''}`}
+              onClick={() => setActiveTab('notices')}
+            >
+              {t ? t('notices') : 'Notices'}
+            </button>
+            <button
+              type="button"
+              className={`notif-tab ${activeTab === 'circulars' ? 'notif-tab--active' : ''}`}
+              onClick={() => setActiveTab('circulars')}
+            >
+              {t ? t('circulars') : 'Circulars'}
+            </button>
+            <button
+              type="button"
+              className={`notif-tab ${activeTab === 'alerts' ? 'notif-tab--active' : ''}`}
+              onClick={() => setActiveTab('alerts')}
+            >
+              {t ? t('alerts') : 'Alerts'}
+            </button>
+          </nav>
+        </div>
 
         {/* Notifications List */}
         <div className="notif-sheet__body">
@@ -174,6 +162,15 @@ export function NotificationPanel({
                 const title = language === 'kn' && item.titleKn ? item.titleKn : item.title;
                 const message = language === 'kn' && item.messageKn ? item.messageKn : item.message;
                 const timeAgo = language === 'kn' && item.timeAgoKn ? item.timeAgoKn : item.timeAgo;
+
+                const routeLabel =
+                  item.routeId === 'route_01'
+                    ? 'Route 500D'
+                    : item.routeId === 'route_04'
+                    ? 'Route 335E'
+                    : item.routeId
+                    ? item.routeId.replace('route_', 'Route ')
+                    : null;
 
                 return (
                   <li
@@ -203,10 +200,10 @@ export function NotificationPanel({
 
                       <p className="notif-item__message">{message}</p>
 
-                      {item.routeId && (
+                      {routeLabel && (
                         <div className="notif-item__tag">
                           <i className="bi bi-signpost-split" />
-                          <span>{item.routeId.replace('route_', 'Route ')}</span>
+                          <span>{routeLabel}</span>
                         </div>
                       )}
                     </div>
