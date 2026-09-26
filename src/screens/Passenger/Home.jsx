@@ -8,7 +8,6 @@ import PushBanner from '../../components/PushBanner';
 import NotificationPanel from '../../components/NotificationPanel';
 import signupAvatar from '../../assets/signup_avatar.png';
 import busAsset from '../../assets/bus-card.png';
-import mrtAsset from '../../assets/mrt-card.png';
 import './Home.scss';
 
 export function Home() {
@@ -16,7 +15,6 @@ export function Home() {
   const { t, language } = useLanguage();
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [mrtModalOpen, setMrtModalOpen] = useState(false);
   const [notifications, setNotifications] = useState([]);
   const [notifOpen, setNotifOpen] = useState(false);
   const [activePush, setActivePush] = useState(null);
@@ -249,28 +247,96 @@ export function Home() {
               </div>
             </div>
 
-            {/* MRT Transport Card */}
+            {/* My Tickets Transport Card */}
             <div
-              className="home-transport-card home-transport-card--mrt"
-              onClick={() => setMrtModalOpen(true)}
+              className="home-transport-card home-transport-card--tickets"
+              onClick={() => navigate('/tickets')}
               role="button"
               tabIndex={0}
               onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') setMrtModalOpen(true);
+                if (e.key === 'Enter' || e.key === ' ') navigate('/tickets');
               }}
             >
               <div className="home-transport-card__info">
-                <h3 className="home-transport-card__name home-transport-card__name--mrt">
-                  {t('Metro')}
+                <h3 className="home-transport-card__name home-transport-card__name--tickets">
+                  {t('my_tickets') || 'My Tickets'}
                 </h3>
               </div>
 
               <div className="home-transport-card__graphic" aria-hidden="true">
-                <img
-                  src={mrtAsset}
-                  alt={t('mrt')}
-                  className="home__transport-img home__transport-img--mrt"
-                />
+                <div className="home-transport-card__ticket-art">
+                  <svg
+                    className="home__transport-ticket-svg"
+                    viewBox="0 0 160 84"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    {/* Shadow / back angled pass */}
+                    <g opacity="0.38" transform="translate(8, -3) rotate(3 80 42)">
+                      <rect x="12" y="10" width="136" height="64" rx="10" fill="#38BDF8" />
+                    </g>
+
+                    {/* Main Ticket Surface */}
+                    <g filter="drop-shadow(0 4px 10px rgba(0, 0, 0, 0.22))">
+                      {/* Ticket Shape with side cutout notches */}
+                      <path
+                        d="M10 20C10 14.4772 14.4772 10 20 10H140C145.523 10 150 14.4772 150 20V34C145.582 34 142 37.5817 142 42C142 46.4183 145.582 50 150 50V64C150 69.5228 145.523 74 140 74H20C14.4772 74 10 69.5228 10 64V50C14.4183 50 18 46.4183 18 42C18 37.5817 14.4183 34 10 34V20Z"
+                        fill="#FFFFFF"
+                      />
+
+                      {/* Perforated Stub Divider */}
+                      <line
+                        x1="104"
+                        y1="12"
+                        x2="104"
+                        y2="72"
+                        stroke="#CBD5E1"
+                        strokeWidth="2"
+                        strokeDasharray="3 3"
+                      />
+
+                      {/* Header badge */}
+                      <rect x="22" y="18" width="50" height="15" rx="4" fill="#0284C7" />
+                      <text
+                        x="47"
+                        y="29"
+                        fill="#FFFFFF"
+                        fontSize="9"
+                        fontWeight="800"
+                        fontFamily="'Plus Jakarta Sans', sans-serif"
+                        textAnchor="middle"
+                        letterSpacing="0.5"
+                      >
+                        BMTC PASS
+                      </text>
+
+                      {/* Ticket Detail Lines */}
+                      <rect x="22" y="40" width="56" height="5" rx="2.5" fill="#0F172A" />
+                      <rect x="22" y="49" width="68" height="4" rx="2" fill="#64748B" />
+                      <rect x="22" y="57" width="40" height="4" rx="2" fill="#0284C7" />
+
+                      {/* QR Code Graphic on Stub */}
+                      <rect x="112" y="19" width="30" height="30" rx="4" fill="#0F172A" />
+                      <rect x="115" y="22" width="8" height="8" fill="#FFFFFF" rx="1.5" />
+                      <rect x="117" y="24" width="4" height="4" fill="#0F172A" />
+                      <rect x="131" y="22" width="8" height="8" fill="#FFFFFF" rx="1.5" />
+                      <rect x="133" y="24" width="4" height="4" fill="#0F172A" />
+                      <rect x="115" y="38" width="8" height="8" fill="#FFFFFF" rx="1.5" />
+                      <rect x="117" y="40" width="4" height="4" fill="#0F172A" />
+                      <rect x="126" y="32" width="5" height="5" fill="#38BDF8" rx="1" />
+                      <rect x="133" y="38" width="6" height="6" fill="#FFFFFF" rx="1" />
+
+                      {/* Barcode lines */}
+                      <line x1="113" y1="56" x2="113" y2="66" stroke="#475569" strokeWidth="2" />
+                      <line x1="117" y1="56" x2="117" y2="66" stroke="#475569" strokeWidth="1" />
+                      <line x1="120" y1="56" x2="120" y2="66" stroke="#475569" strokeWidth="2.5" />
+                      <line x1="125" y1="56" x2="125" y2="66" stroke="#475569" strokeWidth="1" />
+                      <line x1="128" y1="56" x2="128" y2="66" stroke="#475569" strokeWidth="2" />
+                      <line x1="133" y1="56" x2="133" y2="66" stroke="#475569" strokeWidth="1.5" />
+                      <line x1="138" y1="56" x2="138" y2="66" stroke="#475569" strokeWidth="2.5" />
+                    </g>
+                  </svg>
+                </div>
               </div>
             </div>
           </div>
@@ -367,76 +433,6 @@ export function Home() {
           )
         )}
       </main>
-
-      {/* MRT / Metro Info Modal Sheet */}
-      {mrtModalOpen && (
-        <div
-          className="home-modal-overlay"
-          onClick={() => setMrtModalOpen(false)}
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="mrt-modal-title"
-        >
-          <div
-            className="home-modal-sheet"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="home-modal-sheet__top-bar">
-              <div className="home-modal-sheet__handle" />
-              <button
-                type="button"
-                className="home-modal-sheet__top-close"
-                onClick={() => setMrtModalOpen(false)}
-                aria-label={t('close') || 'Close'}
-              >
-                <i className="bi bi-x-lg" />
-              </button>
-            </div>
-
-            <div className="home-modal-sheet__icon" aria-hidden="true">
-              <i className="bi bi-train-front-fill" />
-            </div>
-
-            <h3 id="mrt-modal-title" className="home-modal-sheet__title">
-              {t('mrt_notice_title')}
-            </h3>
-
-            <p className="home-modal-sheet__desc">{t('mrt_notice_desc')}</p>
-
-            <div className="home-modal-sheet__actions">
-              <button
-                type="button"
-                className="home-modal-sheet__primary-btn"
-                onClick={() => {
-                  setMrtModalOpen(false);
-                  navigate('/search?mode=mrt');
-                }}
-              >
-                {t('search_metro_schedules') || 'Search Metro Schedules'}
-              </button>
-
-              <button
-                type="button"
-                className="home-modal-sheet__secondary-btn"
-                onClick={() => {
-                  setMrtModalOpen(false);
-                  navigate('/tickets');
-                }}
-              >
-                {t('view_ncmc')}
-              </button>
-
-              <button
-                type="button"
-                className="home-modal-sheet__close-btn"
-                onClick={() => setMrtModalOpen(false)}
-              >
-                {t('close')}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Notifications Drawer / Panel */}
       <NotificationPanel

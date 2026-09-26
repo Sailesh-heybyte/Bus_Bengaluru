@@ -78,7 +78,7 @@ export default {
   to: "To",
   tap_to_view_qr: "Show to conductor upon boarding",
   ksrtc_intercity_sub: "Book seats on KSRTC Airavat, Rajahamsa & Sarige",
-  ncmc_card_sub: "Contactless RuPay transit card for bus & metro",
+  ncmc_card_sub: "Contactless RuPay transit card for all bus rides",
   ncmc_card_number: "NCMC Card Number",
   ncmc_card_holder: "Card Holder",
   ncmc_balance: "Card Balance",
@@ -242,10 +242,8 @@ export default {
   total_trips: "Total Trips",
   choose_transport: "Choose your Transport",
   bus: "Bus",
-  mrt: "MRT",
+  my_tickets: "My Tickets",
   select: "Select",
-  mrt_notice_title: "Metro / MRT Transit",
-  mrt_notice_desc: "Metro line schedule integration and NCMC contactless tap-and-go are active under Passes.",
   view_ncmc: "View NCMC Card",
   transit_services: "Transit & Services",
   emergency_safety_sub: "SOS, Helplines & Share Trip",
@@ -271,8 +269,5 @@ export default {
   to_station: "Enter destination",
   from_label: "From",
   to_label: "To",
-  clear_history: "Clear",
-  Metro: "Metro",
-  metro: "Metro",
-  search_metro_schedules: "Search Metro Schedules"
+  clear_history: "Clear"
 };

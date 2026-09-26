@@ -78,7 +78,7 @@ export default {
   to: "ವರೆಗೆ",
   tap_to_view_qr: "ಹತ್ತುವಾಗ ನಿರ್ವಾಹಕರಿಗೆ ತೋರಿಸಿ",
   ksrtc_intercity_sub: "KSRTC ಐರಾವತ, ರಾಜಹಂಸ ಮತ್ತು ಸಾರಿಗೆ ಆಸನಗಳನ್ನು ಕಾಯ್ದಿರಿಸಿ",
-  ncmc_card_sub: "ಬಸ್ ಮತ್ತು ಮೆಟ್ರೋ ಪ್ರಯಾಣಕ್ಕಾಗಿ ಸಂಪರ್ಕರಹಿತ RuPay ಕಾರ್ಡ್",
+  ncmc_card_sub: "ಎಲ್ಲಾ ಬಸ್ ಪ್ರಯಾಣಗಳಿಗಾಗಿ ಸಂಪರ್ಕರಹಿತ RuPay ಕಾರ್ಡ್",
   ncmc_card_number: "NCMC ಕಾರ್ಡ್ ಸಂಖ್ಯೆ",
   ncmc_card_holder: "ಕಾರ್ಡ್ ಹೊಂದಿರುವವರು",
   ncmc_balance: "ಕಾರ್ಡ್ ಬಾಕಿ",
@@ -242,10 +242,8 @@ export default {
   total_trips: "ಒಟ್ಟು ಪ್ರಯಾಣಗಳು",
   choose_transport: "ನಿಮ್ಮ ಸಾರಿಗೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ",
   bus: "ಬಸ್",
-  mrt: "ಎಮ್ಆರ್ಟಿ",
+  my_tickets: "ನನ್ನ ಟಿಕೆಟ್‌ಗಳು",
   select: "ಆಯ್ಕೆಮಾಡಿ",
-  mrt_notice_title: "ಮೆಟ್ರೋ / ಎಮ್ಆರ್ಟಿ ಸಾರಿಗೆ",
-  mrt_notice_desc: "ಮೆಟ್ರೋ ಮಾರ್ಗ ವೇಳಾಪಟ್ಟಿ ಮತ್ತು NCMC ಕಾರ್ಡ್ ಸೌಲಭ್ಯ ಪಾಸ್‌ಗಳ ಅಡಿಯಲ್ಲಿ ಲಭ್ಯವಿದೆ.",
   view_ncmc: "NCMC ಕಾರ್ಡ್ ವೀಕ್ಷಿಸಿ",
   transit_services: "ಸಾರಿಗೆ ಮತ್ತು ಸೇವೆಗಳು",
   emergency_safety_sub: "ತುರ್ತು SOS, ಸಹಾಯವಾಣಿಗಳು ಮತ್ತು ಟ್ರಿಪ್ ಹಂಚಿಕೆ",
@@ -271,8 +269,5 @@ export default {
   to_station: "ಗಮ್ಯಸ್ಥಾನ ನಮೂದಿಸಿ",
   from_label: "ಇಂದ",
   to_label: "ವರೆಗೆ",
-  clear_history: "ತೆರವು",
-  Metro: "ಮೆಟ್ರೋ",
-  metro: "ಮೆಟ್ರೋ",
-  search_metro_schedules: "ಮೆಟ್ರೋ ವೇಳಾಪಟ್ಟಿ ಹುಡುಕಿ"
+  clear_history: "ತೆರವು"
 };

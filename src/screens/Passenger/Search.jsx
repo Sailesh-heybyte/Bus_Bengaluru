@@ -3,7 +3,6 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext';
 import { searchPlaceToPlace } from '../../api/routes';
 import { useDebounce } from '../../hooks/useDebounce';
-import mrtAsset from '../../assets/mrt-card.png';
 import busAsset from '../../assets/bus-card.png';
 import './Search.scss';
 
@@ -43,67 +42,16 @@ const DEFAULT_BUS_SEARCHES = [
   }
 ];
 
-const DEFAULT_MRT_SEARCHES = [
-  {
-    id: 'mrt_recent_1',
-    mode: 'mrt',
-    from: 'Lorem MRT Station',
-    to: 'Dolor MRT Station',
-    station: 'Lorem MRT Station',
-    stationKn: 'ಲೋರೆಂ ಎಮ್ಆರ್ಟಿ ನಿಲ್ದಾಣ',
-    time: '10:00 ⟷ 10:30',
-    fare: '5.0',
-    routeId: 'route_01'
-  },
-  {
-    id: 'mrt_recent_2',
-    mode: 'mrt',
-    from: 'Majestic Metro Station',
-    to: 'Whitefield Kadugodi',
-    station: 'Majestic ⟷ Whitefield Kadugodi',
-    stationKn: 'ಮೆಜೆಸ್ಟಿಕ್ ⟷ ವೈಟ್‌ಫೀಲ್ಡ್ ಕಾಡುಗೋಡಿ',
-    time: '11:05 ⟷ 11:45',
-    fare: '5.0',
-    routeId: 'route_04'
-  },
-  {
-    id: 'mrt_recent_3',
-    mode: 'mrt',
-    from: 'Baiyappanahalli',
-    to: 'MG Road',
-    station: 'Baiyappanahalli ⟷ MG Road',
-    stationKn: 'ಬೈಯಪ್ಪನಹಳ್ಳಿ ⟷ ಎಂ.ಜಿ. ರಸ್ತೆ',
-    time: '11:25 ⟷ 12:30',
-    fare: '3.0',
-    routeId: 'route_01'
-  }
-];
-
 export function Search() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { t, language } = useLanguage();
 
-  const modeParam = searchParams.get('mode') === 'mrt' ? 'mrt' : 'bus';
-  const [transportMode, setTransportMode] = useState(modeParam);
-
-  const defaultFrom = modeParam === 'mrt' ? 'Lorem MRT Station' : 'Central Silk Board';
-  const defaultTo = modeParam === 'mrt' ? 'Dolor MRT Station' : 'Hebbal';
+  const defaultFrom = 'Central Silk Board';
+  const defaultTo = 'Hebbal';
 
   const [fromQuery, setFromQuery] = useState(searchParams.get('from') || defaultFrom);
   const [toQuery, setToQuery] = useState(searchParams.get('to') || defaultTo);
-
-  // Sync mode and default queries when URL mode changes
-  useEffect(() => {
-    const newMode = searchParams.get('mode') === 'mrt' ? 'mrt' : 'bus';
-    setTransportMode(newMode);
-    if (!searchParams.get('from')) {
-      setFromQuery(newMode === 'mrt' ? 'Lorem MRT Station' : 'Central Silk Board');
-    }
-    if (!searchParams.get('to')) {
-      setToQuery(newMode === 'mrt' ? 'Dolor MRT Station' : 'Hebbal');
-    }
-  }, [searchParams]);
 
   const debouncedFrom = useDebounce(fromQuery, 250);
   const debouncedTo = useDebounce(toQuery, 250);
@@ -115,16 +63,14 @@ export function Search() {
     } catch {
       // fallback
     }
-    return modeParam === 'mrt' ? DEFAULT_MRT_SEARCHES : DEFAULT_BUS_SEARCHES;
+    return DEFAULT_BUS_SEARCHES;
   });
 
   const [searchResults, setSearchResults] = useState([]);
 
   // Live search when user modifies from or to query
   useEffect(() => {
-    const isDefault =
-      (fromQuery === 'Lorem MRT Station' && toQuery === 'Dolor MRT Station') ||
-      (fromQuery === 'Central Silk Board' && toQuery === 'Hebbal');
+    const isDefault = fromQuery === 'Central Silk Board' && toQuery === 'Hebbal';
 
     if (isDefault || (!debouncedFrom.trim() && !debouncedTo.trim())) {
       setSearchResults([]);
@@ -178,8 +124,6 @@ export function Search() {
   const activeSearches =
     recentSearches.length > 0
       ? recentSearches
-      : transportMode === 'mrt'
-      ? DEFAULT_MRT_SEARCHES
       : DEFAULT_BUS_SEARCHES;
 
   return (
@@ -197,12 +141,12 @@ export function Search() {
           </button>
         </div>
 
-        {/* Large Prominent Vehicle Illustration (Bus or Metro) */}
+        {/* Large Prominent Vehicle Illustration */}
         <div className="search-page__vehicle-wrap" aria-hidden="true">
           <img
-            src={transportMode === 'mrt' ? mrtAsset : busAsset}
-            alt={transportMode === 'mrt' ? 'MRT Train' : 'Bus'}
-            className={`search-page__vehicle-img search-page__vehicle-img--${transportMode}`}
+            src={busAsset}
+            alt="Bus"
+            className="search-page__vehicle-img search-page__vehicle-img--bus"
           />
           <div className="search-page__track-line" />
         </div>
@@ -363,7 +307,7 @@ export function Search() {
 
                   <div className="search-schedule-item__right">
                     <span className="search-schedule-item__fare">
-                      {transportMode === 'mrt' ? '$' : '₹'} {item.fare}
+                      ₹ {item.fare}
                     </span>
                     <i className="bi bi-chevron-right search-schedule-item__chevron" aria-hidden="true" />
                   </div>

@@ -81,12 +81,7 @@
     &--bus {
       height: 92px; /* Prominent, proportional to screen */
       margin-right: -12px;
-      transform: scaleX(-1); /* Mirrors bus to face left towards the screen, matching the metro */
-    }
-
-    &--mrt {
-      height: 64px;
-      margin-right: -18px; /* Bleeds seamlessly from right corner */
+      transform: scaleX(-1); /* Mirrors bus to face towards the screen */
     }
   }
 
