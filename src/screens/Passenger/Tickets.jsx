@@ -356,41 +356,33 @@ export function Tickets() {
                 </div>
               </div>
 
-              {/* POWDER BLUE HIGHLIGHTED MIDDLE BAR */}
+              {/* POWDER BLUE HIGHLIGHTED MIDDLE BAR (Spacious 3 Columns) */}
               <div className="boarding-pass-card__mid-bar">
-                <div className="boarding-pass-card__mid-col">
+                <div className="boarding-pass-card__mid-col boarding-pass-card__mid-col--time">
                   <span className="boarding-pass-card__mid-label">Boarding time</span>
                   <span className="boarding-pass-card__mid-val">
                     {formatTime(selectedTicketModal.issuedAt) || '09:00 AM'}
                   </span>
                 </div>
-                <div className="boarding-pass-card__mid-col">
+                <div className="boarding-pass-card__mid-col boarding-pass-card__mid-col--route">
                   <span className="boarding-pass-card__mid-label">Route</span>
                   <span className="boarding-pass-card__mid-val">
                     {selectedTicketModal.routeNumber || '500D'}
                   </span>
                 </div>
-                <div className="boarding-pass-card__mid-col">
-                  <span className="boarding-pass-card__mid-label">Bay</span>
-                  <span className="boarding-pass-card__mid-val">Bay 3</span>
-                </div>
-                <div className="boarding-pass-card__mid-col">
+                <div className="boarding-pass-card__mid-col boarding-pass-card__mid-col--bus">
                   <span className="boarding-pass-card__mid-label">Bus No</span>
                   <span className="boarding-pass-card__mid-val">KA-01-F-4012</span>
                 </div>
               </div>
 
-              {/* PASSENGER & FARE DETAILS ROW */}
+              {/* PASSENGER & FARE DETAILS ROW (Spacious 2 Columns) */}
               <div className="boarding-pass-card__passenger-row">
                 <div className="boarding-pass-card__pass-col">
                   <span className="boarding-pass-card__pass-label">Passenger</span>
                   <span className="boarding-pass-card__pass-val">Ravi Kumar</span>
                 </div>
-                <div className="boarding-pass-card__pass-col">
-                  <span className="boarding-pass-card__pass-label">Seat</span>
-                  <span className="boarding-pass-card__pass-val">General</span>
-                </div>
-                <div className="boarding-pass-card__pass-col">
+                <div className="boarding-pass-card__pass-col boarding-pass-card__pass-col--fare">
                   <span className="boarding-pass-card__pass-label">Fare</span>
                   <span className="boarding-pass-card__pass-val">
                     ₹{selectedTicketModal.fareAmount} ({selectedTicketModal.paymentMethod?.toUpperCase() || 'UPI'})
