@@ -356,23 +356,42 @@ export function Tickets() {
                 </div>
               </div>
 
-              {/* POWDER BLUE HIGHLIGHTED MIDDLE BAR (Spacious 3 Columns) */}
-              <div className="boarding-pass-card__mid-bar">
-                <div className="boarding-pass-card__mid-col boarding-pass-card__mid-col--time">
-                  <span className="boarding-pass-card__mid-label">Boarding time</span>
-                  <span className="boarding-pass-card__mid-val">
-                    {formatTime(selectedTicketModal.issuedAt) || '09:00 AM'}
-                  </span>
+              {/* EXECUTIVE 2x2 SEGMENTED MATRIX (Zero Overflow, Classic & Serene) */}
+              <div className="boarding-pass-card__mid-matrix">
+                {/* Row 1: Boarding Time & High-Contrast Route Badge */}
+                <div className="boarding-pass-card__matrix-row">
+                  <div className="boarding-pass-card__matrix-col">
+                    <span className="boarding-pass-card__matrix-label">Boarding Time</span>
+                    <span className="boarding-pass-card__matrix-val">
+                      {formatTime(selectedTicketModal.issuedAt) || '09:00 AM'}
+                    </span>
+                  </div>
+                  <div className="boarding-pass-card__matrix-col boarding-pass-card__matrix-col--right">
+                    <span className="boarding-pass-card__matrix-label">Route</span>
+                    <div className="boarding-pass-card__route-badge">
+                      <i className="bi bi-signpost-split-fill" />
+                      <span>{selectedTicketModal.routeNumber || '500D'}</span>
+                    </div>
+                  </div>
                 </div>
-                <div className="boarding-pass-card__mid-col boarding-pass-card__mid-col--route">
-                  <span className="boarding-pass-card__mid-label">Route</span>
-                  <span className="boarding-pass-card__mid-val">
-                    {selectedTicketModal.routeNumber || '500D'}
-                  </span>
-                </div>
-                <div className="boarding-pass-card__mid-col boarding-pass-card__mid-col--bus">
-                  <span className="boarding-pass-card__mid-label">Bus No</span>
-                  <span className="boarding-pass-card__mid-val">KA-01-F-4012</span>
+
+                {/* Subtle Translucent Hairline Divider */}
+                <div className="boarding-pass-card__matrix-divider" />
+
+                {/* Row 2: Bus Vehicle Plate & Service Class */}
+                <div className="boarding-pass-card__matrix-row">
+                  <div className="boarding-pass-card__matrix-col">
+                    <span className="boarding-pass-card__matrix-label">Vehicle No</span>
+                    <span className="boarding-pass-card__matrix-val boarding-pass-card__matrix-val--mono">
+                      KA-01-F-4012
+                    </span>
+                  </div>
+                  <div className="boarding-pass-card__matrix-col boarding-pass-card__matrix-col--right">
+                    <span className="boarding-pass-card__matrix-label">Service</span>
+                    <span className="boarding-pass-card__matrix-val boarding-pass-card__matrix-val--service">
+                      Direct Express
+                    </span>
+                  </div>
                 </div>
               </div>
 
