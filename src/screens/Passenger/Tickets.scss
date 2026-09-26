@@ -590,14 +590,17 @@
 }
 
 /* ==========================================================================
-   BOARDING PASS MODAL (Pixel-Perfect to Reference Mockup)
+   BOARDING PASS MODAL (Light Luxury Frosted Experience)
+   ========================================================================== */
+/* ==========================================================================
+   BOARDING PASS MODAL (70% White / 20% Blue Light Luxury Experience)
    ========================================================================== */
 .boarding-pass-overlay {
   position: fixed;
   inset: 0;
-  background-color: rgba(15, 23, 42, 0.82);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  background: radial-gradient(circle at 50% 30%, rgba(220, 235, 252, 0.92), rgba(199, 222, 248, 0.95));
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   z-index: 1300;
   display: flex;
   align-items: center;
@@ -609,45 +612,53 @@
 
 .boarding-pass-card {
   position: relative;
-  background-color: #ffffff;
+  // 70% white + 20% blue light luxury blend
+  background-color: #f0f6fd;
+  background: linear-gradient(175deg, #ffffff 0%, #f4f8fe 40%, #e2effd 85%, #d5e8fb 100%);
+  border: 1px solid rgba(186, 220, 250, 0.85);
   width: 100%;
   max-width: 345px;
   border-radius: 28px;
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.45);
+  box-shadow:
+    0 24px 60px -10px rgba(2, 132, 199, 0.22),
+    0 8px 24px -4px rgba(15, 23, 42, 0.08),
+    0 0 0 1px rgba(255, 255, 255, 0.8) inset;
   box-sizing: border-box;
   overflow: hidden;
   animation: bp-slide-up 0.28s cubic-bezier(0.16, 1, 0.3, 1);
 
   &__close-btn {
     position: absolute;
-    top: 14px;
-    right: 14px;
-    width: 30px;
-    height: 30px;
+    top: 12px;
+    right: 12px;
+    width: 28px;
+    height: 28px;
     border-radius: 50%;
-    background-color: #f1f5f9;
-    border: none;
-    color: #64748b;
+    background-color: rgba(255, 255, 255, 0.9);
+    border: 1px solid #bfdbfe;
+    color: #475569;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 13px;
+    font-size: 12px;
     cursor: pointer;
     z-index: 10;
-    transition: background-color 0.15s ease, color 0.15s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+    transition: background-color 0.15s ease, color 0.15s ease, transform 0.15s ease;
 
     &:hover {
-      background-color: #e2e8f0;
+      background-color: #ffffff;
       color: #0f172a;
+      transform: scale(1.05);
     }
   }
 
   /* TOP SECTION */
   &__top {
-    padding: 24px 22px 16px;
+    padding: 18px 20px 14px;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 14px;
   }
 
   /* FROM ○ ------------ 🚌 ------------ ● TO */
@@ -657,60 +668,59 @@
     justify-content: space-between;
     width: 100%;
     gap: 8px;
+    padding-right: 28px; // Avoid touching top-right close button
+    box-sizing: border-box;
   }
 
   &__track-endpoint {
     font-size: 11px;
-    font-weight: 700;
-    color: #64748b;
+    font-weight: 800;
+    color: #475569;
     letter-spacing: 0.5px;
     flex-shrink: 0;
   }
 
   &__track-middle {
     flex: 1;
-    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     padding: 0 4px;
+    gap: 2px;
   }
 
   &__track-duration {
     font-size: 10px;
     font-weight: 700;
-    color: #475569;
-    margin-bottom: 2px;
+    color: #64748b;
   }
 
   &__track-pill {
     background-color: #0f172a;
     color: #ffffff;
     font-size: 9px;
-    font-weight: 700;
-    padding: 1px 8px;
+    font-weight: 800;
+    padding: 1.5px 8px;
     border-radius: 999px;
-    letter-spacing: 0.3px;
-    z-index: 2;
-    margin-bottom: 4px;
+    letter-spacing: 0.4px;
+    margin-bottom: 2px;
   }
 
   &__track-dash {
     width: 100%;
-    border-top: 1px dashed #cbd5e1;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
+    border-top: 1.5px dashed #cbd5e1;
+    position: relative;
+    top: 10px;
     z-index: 1;
   }
 
   &__track-bus-icon {
     position: relative;
     z-index: 2;
-    background-color: #ffffff;
-    padding: 0 6px;
-    color: #0f172a;
+    background-color: transparent;
+    padding: 0 4px;
+    color: #0284c7;
     font-size: 13px;
     display: flex;
     align-items: center;
@@ -723,6 +733,7 @@
     align-items: flex-start;
     justify-content: space-between;
     width: 100%;
+    margin-top: 2px;
   }
 
   &__station-col {
@@ -743,13 +754,13 @@
     color: #0f172a;
     margin: 0;
     line-height: 1;
-    letter-spacing: -0.03em;
+    letter-spacing: -0.04em;
   }
 
   &__stop-full {
     font-size: 12px;
     color: #64748b;
-    font-weight: 500;
+    font-weight: 600;
     margin: 4px 0 0;
     line-height: 1.25;
   }
@@ -758,25 +769,27 @@
     font-size: 16px;
     font-weight: 800;
     color: #0f172a;
-    margin-top: 12px;
+    margin-top: 10px;
     line-height: 1;
   }
 
   &__date {
     font-size: 11px;
-    color: #64748b;
+    color: #94a3b8;
     font-weight: 600;
     margin-top: 2px;
   }
 
-  /* POWDER BLUE HIGHLIGHTED MIDDLE BAR */
+  /* POWDER BLUE HIGHLIGHTED MIDDLE BAR (Fixed 4-Column Grid) */
   &__mid-bar {
-    background-color: #99b8d8; // Muted powder blue matching the reference screenshot
-    background: linear-gradient(135deg, #a7c5e6 0%, #90b3db 100%);
+    background-color: #bfdbfe;
+    background: linear-gradient(135deg, #bfdbfe 0%, #93c5fd 100%);
+    border: 1px solid #7dd3fc;
     border-radius: 14px;
     padding: 10px 12px;
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: 1.15fr 0.85fr 0.75fr 1.25fr;
+    align-items: center;
     gap: 4px;
     box-sizing: border-box;
     width: 100%;
@@ -786,13 +799,18 @@
     display: flex;
     flex-direction: column;
     text-align: left;
+
+    &:last-child {
+      text-align: right;
+    }
   }
 
   &__mid-label {
     font-size: 9px;
-    font-weight: 600;
-    color: #1e3a5f;
-    line-height: 1.2;
+    font-weight: 700;
+    color: #1e40af;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
     white-space: nowrap;
   }
 
@@ -839,7 +857,7 @@
   }
 
   /* ========================================================================
-     PERFORATION DIVIDER WITH NOTCHES (Matches Reference Cutouts)
+     PERFORATION DIVIDER WITH NOTCHES (Matches Frosted Light Backdrop)
      ======================================================================== */
   &__perforation {
     position: relative;
@@ -852,8 +870,8 @@
   }
 
   &__perforated-line {
-    width: calc(100% - 44px);
-    border-top: 2px dashed #cbd5e1;
+    width: calc(100% - 46px);
+    border-top: 2px dashed #93c5fd;
   }
 
   &__notch {
@@ -861,8 +879,8 @@
     width: 28px;
     height: 28px;
     border-radius: 50%;
-    background-color: rgba(15, 23, 42, 0.82); // Matches backdrop overlay to create seamless cutout effect
-    box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.15);
+    background: linear-gradient(135deg, #c7def8, #b8d4f4); // Matches the frosted backdrop!
+    box-shadow: inset 0 2px 4px rgba(2, 132, 199, 0.15);
 
     &--left {
       left: -14px;
@@ -874,10 +892,10 @@
   }
 
   /* ========================================================================
-     BOTTOM STUB: QR CODE IN PLACE OF BARCODE (User Requirement)
+     BOTTOM STUB: QR CODE IN PLACE OF BARCODE
      ======================================================================== */
   &__stub {
-    padding: 10px 22px 24px;
+    padding: 6px 20px 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -885,13 +903,13 @@
   }
 
   &__qr-box {
-    width: 130px;
-    height: 130px;
-    padding: 6px;
+    width: 132px;
+    height: 132px;
+    padding: 8px;
     background-color: #ffffff;
-    border-radius: 16px;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
-    border: 1px solid #e2e8f0;
+    border-radius: 18px;
+    box-shadow: 0 4px 16px rgba(2, 132, 199, 0.12), 0 1px 3px rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(186, 220, 250, 0.9);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -904,11 +922,12 @@
   }
 
   &__stub-meta {
-    margin-top: 10px;
+    margin-top: 8px;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 4px;
+    width: 100%;
   }
 
   &__stub-num {
@@ -942,7 +961,7 @@
   &__stub-hint {
     font-size: 11px;
     color: #64748b;
-    margin: 4px 0 0;
+    margin: 2px 0 0;
     font-weight: 500;
   }
 }
